@@ -1,0 +1,54 @@
+ html {
+	font-family: Roboto, sans-serif;
+}
+     
+body{
+	width: 100%;
+	height: 100%;	
+	margin: 0;
+  	border: 0 none;
+  	padding: 0;
+}
+
+.cloudIntroDiv{
+	background:linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url("../images/cloudBg.jpg") no-repeat fixed center center / cover ;
+    height:900px;
+}
+
+.multiDeviceSupportDiv{
+	background:url("../images/multiDevice.jpg") no-repeat fixed center center / cover ;
+    height:600px;	
+}
+
+.multiDeviceSupportDiv h1{
+	text-transform: uppercase;	
+	font-weight: 700;
+	color: white;
+}
+
+.cloudIntroDiv h1{
+	text-transform: uppercase;	
+	font-weight: 700;
+	color: #1a237e;
+}
+
+nav{
+	background-color: #1e88e5;
+}
+
+.formContainer{
+	margin-top: 5%;	
+}
+
+.formContainer button{
+	width: 100%;
+}
+
+.material-icons {
+    vertical-align: middle;
+    margin-right: 3%;
+}
+
+.userDetails{
+	padding: 5%;
+}

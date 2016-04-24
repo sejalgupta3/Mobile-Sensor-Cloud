@@ -1,0 +1,33 @@
+<div class="container formContainer">
+	<div class="row">
+		<div class="col m4 offset-m4 col s12">
+			<div class="row">
+				<p>{{loginMessage}}</p>
+			</div>
+			<div class="row">
+				<div class="input-field col s12">
+	          		<input id="username" type="text" class="validate" ng-model="username">
+	          		<label for="username">Username</label>
+	        	</div>
+			</div>
+			<div class="row">
+				<div class="input-field col s12">
+	          		<input id="password" type="password" class="validate" ng-model="password">
+	          		<label for="password">Password</label>
+	        	</div>
+			</div>
+			<div class="row">
+				<div class="input-field col s12">
+					<button class="btn waves-effect waves-light btn-large" ng-click="confirmLogin()">Login
+		  			</button>
+	  			</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="row">
+		<div class="col m4 offset-m4 col s12 center-align">
+			<p>Are you not Registered? Go ahead and <a href="#/register">Register yourself</a></p>
+		</div>
+	</div>
+</div>
