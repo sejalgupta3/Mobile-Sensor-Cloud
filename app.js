@@ -8,6 +8,7 @@ var express = require('express')
   , http = require('http')
   , path = require('path')
 var app = express();
+var sensorManager = require('./routes/SensorManager')
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -29,6 +30,14 @@ app.get('/', routes.index);
 app.get('/partials/:name', routes.partials);
 app.post('/register', routes.register);
 app.post('/login', routes.validateUser);
+app.post('/getSensorLatestData', routes.getSensorLatestData);
+app.post('/addStation', sensorManager.addStation);
+app.post('/editStation', sensorManager.editStation);
+app.post('/deleteStation', sensorManager.deleteStation);
+app.get('/getStationList', sensorManager.getStationList);
+app.post('/addSensor', sensorManager.addSensor);
+app.post('/editSensor', sensorManager.editSensor);
+app.post('/deleteSensor', sensorManager.deleteSensor);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
