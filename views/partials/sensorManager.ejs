@@ -1,0 +1,28 @@
+<div style="padding:3%;">
+	<div class="row right-align">
+		<a class="waves-effect waves-light btn #283593 indigo darken-3" href="#/addStation">Add Station</a>
+	</div>
+	<div class="row" style="padding:5%;" ng-repeat="station in stationList">
+		<table class="bordered highlight">
+			<thead>
+				<span id="stationName">{{station.name}}</span>
+				<span class="stationButtons">
+					<a class="waves-effect waves-light btn" href="#/addSensor/{{station.id}}">Add Sensor</a>
+					<a class="waves-effect waves-light btn" href="#/editStation/{{station.id}}">Edit Station</a>
+					<a class="waves-effect waves-light btn" ng-click="confirmDeleteStation(station.id)">Delete Station</a>
+				</span>
+			</thead>
+			<tbody ng-repeat="sensor in station.sensorList">
+				<tr>
+					<td>{{sensor.name}}</td>
+					<td>{{sensor.type}}</td>
+					<td>{{sensor.status}}</td>
+					<td class="right-align">
+						<a class="waves-effect waves-light btn green" href="#/editSensor/{{station.id}}/{{sensor.name}}"><i class="material-icons">edit</i></a>
+						<a class="waves-effect waves-light btn green" ng-click="confirmDeleteSensor(station.id, sensor.name)"><i class="material-icons">delete</i></a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>

@@ -52,3 +52,20 @@ nav{
 .userDetails{
 	padding: 5%;
 }
+
+main{
+	padding-left: 240px;
+}
+
+#stationName{
+	text-transform: capitalize;
+	font-weight: bold;
+}
+
+.stationButtons{
+	float:right
+}
+
+.stationButtons a{
+	font-size:0.8em;
+}

@@ -19,6 +19,83 @@ sensorCloudApp.controller('loginController', function($scope, $http, userService
 		});
 	};	
 });
-	
-sensorCloudApp.controller('sidebarController', function($scope){
+
+sensorCloudApp.controller('userDashboardController', function($scope, $http, sensorDataService){
+	 $(".button-collapse").sideNav();
+	//sensorDataService.getSensorData();
 });
+
+sensorCloudApp.controller('sensorManagerController', function($scope, $stateParams ,$http, sensorService, stationService){
+	$scope.selectedStataionId = $stateParams.stationId;
+	$scope.selectedSensorName = $stateParams.sensorName;
+	
+	stationService.getStationList(function(list){
+		$scope.stationList = list;
+		getStation();
+		getSensor();
+	});
+	
+	var getStation = function(){
+		if($scope.selectedStataionId){
+			for(index in $scope.stationList){
+				var station = $scope.stationList[index];
+				if(station.id == $scope.selectedStataionId){
+					$scope.stationName = station.name;
+					$scope.stationId = station.id;
+					$scope.lat = station.lat;
+					$scope.lng = station.long;
+				}
+			}
+		}
+	};
+	
+	var getSensor = function(){
+		if($scope.selectedStataionId && $scope.selectedSensorName){
+			for(index in $scope.stationList){
+				var station = $scope.stationList[index];
+				if(station.id == $scope.selectedStataionId){
+					for(index2 in station.sensorList){
+						var sensor = station.sensorList[index2];
+						if(sensor.name == $scope.selectedSensorName){
+							$scope.sensorName = sensor.name;
+							$scope.sensorType = sensor.type;
+						}
+					}
+				}
+			}
+		}
+	};
+		
+	$scope.confirmAddStation = function(){
+		stationService.addStation($scope.stationName, $scope.stationId, $scope.lat, $scope.lng);
+	}
+	
+	$scope.confirmEditStation = function(){
+		stationService.editStation($scope.stationName, $scope.stationId, $scope.lat, $scope.lng);
+	}
+	
+	$scope.confirmDeleteStation = function(selectedStataionId){
+		if(confirm("Are you sure you want to delete the station")){
+			stationService.deleteStation(selectedStataionId, function(list){
+				$scope.stationList = list;
+			});
+		}
+	}
+	
+	$scope.confirmAddSensor = function(){
+		sensorService.addSensor($scope.sensorName, $scope.sensorType, $scope.selectedStataionId);
+	}
+	
+	$scope.confirmEditSensor = function(){
+		sensorService.editSensor($scope.sensorName, $scope.sensorType, $scope.selectedStataionId);
+	}
+	
+	$scope.confirmDeleteSensor = function(selectedStataionId, selectedSensorName){
+		if(confirm("Are you sure you want to delete the sensor")){
+			sensorService.deleteSensor(selectedStataionId, selectedSensorName, function(list){
+				$scope.stationList = list;
+			});
+		}
+	}
+});
+

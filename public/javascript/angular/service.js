@@ -1,5 +1,4 @@
 sensorCloudApp.service('userService', function($http, $state){
-	
 	var userData = {
 			firstName: '',
 			userType: '',
@@ -17,7 +16,7 @@ sensorCloudApp.service('userService', function($http, $state){
 		userData.lastName = lname;
 		userData.email = email;
 		userData.username = username;
-		userData.password = password;
+		userData.password = password;W
 		
 		$http.post('/register', JSON.stringify(userData))
 			.success(function(res){
@@ -65,3 +64,117 @@ sensorCloudApp.service('verifyUserService', function($http, $state){
 		return userType;
 	}
 });
+
+sensorCloudApp.service('sensorDataService', function($http, $state){
+	this.getSensorData = function(){
+		$http.post('/getSensorLatestData')
+			.success(function(res){
+			}
+		);
+	};
+});
+
+sensorCloudApp.service('stationService', function($http, $state){
+	
+	this.addStation = function(name, id, lat, long){
+		var stationData = {
+				name: name,
+				id: id,
+				lat: lat,
+				long: long,
+				status: 'active',
+				sensorList:[]
+		};
+	
+		$http.post('/addStation', JSON.stringify(stationData))
+			.success(function(res){
+				responseMessage = res;
+				console.log(responseMessage);
+				$state.go("sensorManager");
+			}
+		);
+	};
+	
+	this.getStationList = function(callback){
+		$http.get('/getStationList')
+			.success(function(res){
+				callback(res);
+			}
+		);
+	}
+	
+	this.editStation = function(name, id, lat, long){
+		var editStationData = {
+				name: name,
+				id: id,
+				lat: lat,
+				long: long,
+				status: 'active',
+		};
+		editStationData.name = name;
+		editStationData.id = id;
+		editStationData.lat = lat;
+		editStationData.long = long;
+		editStationData.status = 'active';
+		$http.post('/editStation', JSON.stringify(editStationData))
+			.success(function(res){
+				responseMessage = res;
+				alert(res);
+				$state.go('sensorManager');
+			}
+		);
+	}
+	
+	this.deleteStation = function(id, callback){
+		$http.post('/deleteStation', JSON.stringify({id: id}))
+			.success(function(res){
+				callback(res);
+			}
+		);
+	}
+});
+
+sensorCloudApp.service('sensorService', function($http, $state){
+	var sensorData = {
+			name:'',
+			type:'',
+			status:'',
+			station:''
+		};
+	
+	this.addSensor = function(name, type, station){
+		sensorData.name = name;
+		sensorData.type = type;
+		sensorData.status = 'active'
+		sensorData.station = station;
+		
+		$http.post('/addSensor', JSON.stringify(sensorData))
+			.success(function(res){	
+				$state.go('sensorManager');
+			}
+		);
+	};
+
+	this.editSensor =  function(name, type, station){
+		sensorData.name = name;
+		sensorData.type = type;
+		sensorData.status = 'active';
+		sensorData.station = station;
+		
+		$http.post('/editSensor', JSON.stringify(sensorData))
+			.success(function(res){	
+				$state.go('sensorManager');
+			}
+		);
+	}
+	
+	this.deleteSensor = function(station, name, callback){
+		$http.post('/deleteSensor', JSON.stringify({id: station, name: name}))
+			.success(function(res){
+				callback(res);
+			}
+		);
+	}
+});
+
+

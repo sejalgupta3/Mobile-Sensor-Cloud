@@ -8,12 +8,10 @@ sensorCloudApp.config(function($stateProvider, $urlRouterProvider) {
 		.state('userNavigation', {
 			templateUrl: '/partials/userDashboardNavigation.ejs',
 		    abstract: true,
-		    controller: 'sidebarController'
 		})
 		.state('adminNavigation', {
 			templateUrl: '/partials/adminDashboardNavigation.ejs',
 		    abstract: true,
-		    controller: 'sidebarController'
 		})
     	.state('home', {
             url: '/',
@@ -37,12 +35,48 @@ sensorCloudApp.config(function($stateProvider, $urlRouterProvider) {
             url: '/userDashboard',
             parent: 'userNavigation',
             templateUrl: '/partials/userDashboard.ejs',
-            //controller: 'userDashboardController'
+            controller: 'userDashboardController'
         })
         .state('adminDashboard', {
             url: '/adminDashboard',
             parent: 'adminNavigation',
             templateUrl: '/partials/adminDashboard.ejs',
             //controller: 'adminDashboardController'
-        });
-});
+        })
+		.state('sensorManager', {
+			url: '/sensorManager',
+	        parent: 'adminNavigation',
+	        templateUrl: '/partials/sensorManager.ejs',
+	        controller: 'sensorManagerController'
+	    })
+	    .state('addStation', {
+			url: '/addStation',
+	        parent: 'adminNavigation',
+	        templateUrl: '/partials/addStation.ejs',
+	        controller: 'sensorManagerController'
+	    })
+	    .state('editStation', {
+			url: '/editStation/:stationId',
+	        parent: 'adminNavigation',
+	        templateUrl: '/partials/editStation.ejs',
+	        controller: 'sensorManagerController'
+	    })
+	    .state('deleteStation', {
+			url: '/deleteStation/:stationId',
+	        parent: 'adminNavigation',
+	        templateUrl: '/partials/deleteStation.ejs',
+	        controller: 'sensorManagerController'
+	    })
+	    .state('addSensor', {
+			url: '/addSensor/:stationId',
+	        parent: 'adminNavigation',
+	        templateUrl: '/partials/addSensor.ejs',
+	        controller: 'sensorManagerController'
+	    })
+	    .state('editSensor', {
+			url: '/editSensor/:stationId/:sensorName',
+	        parent: 'adminNavigation',
+	        templateUrl: '/partials/editSensor.ejs',
+	        controller: 'sensorManagerController'
+	    });
+	});
