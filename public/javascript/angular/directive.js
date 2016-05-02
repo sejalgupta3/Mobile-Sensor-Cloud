@@ -4,22 +4,22 @@ sensorCloudApp.directive('myMap', function() {
         var map, infoWindow;
         var markers = [];
         var haightAshbury = {lat: 37.769, lng: -122.446};
-        
+
         // map config
         var mapOptions = {
             center: haightAshbury,
-            zoom: 4,
+            zoom: 6,
             mapTypeId: google.maps.MapTypeId.TERRAIN,
             scrollwheel: false
         };
-        
+
         // init the map
         function initMap() {
             if (map === void 0) {
                 map = new google.maps.Map(element[0], mapOptions);
             }
-        }    
-        
+        }
+
         // place a marker
         function setMarker(map, position, title, content, status) {
             var marker;
@@ -38,7 +38,7 @@ sensorCloudApp.directive('myMap', function() {
 
             marker = new google.maps.Marker(markerOptions);
             markers.push(marker); // add marker to array
-            
+
             google.maps.event.addListener(marker, 'click', function () {
                 // close window if not undefined
                 if (infoWindow !== void 0) {
@@ -52,22 +52,39 @@ sensorCloudApp.directive('myMap', function() {
                 infoWindow.open(map, marker);
             });
         }
-        
+
+        function setMapOnAll(map) {
+          for (var i = 0; i < markers.length; i++) {
+            markers[i].setMap(map);
+          }
+        }
+
+        function deleteMarkers() {
+          clearMarkers();
+          markers = [];
+        }
+
+        function clearMarkers() {
+          setMapOnAll(null);
+        }
         // show the map and place some markers
         initMap();
-        
-        for(index in scope.stations){
-        	var station = scope.stations[index];
-        	console.log(station);
-        	setMarker(map, new google.maps.LatLng(station.lat, station.long), station.name, station.id, station.status);
-        }
-       
-        
-//        setMarker(map, new google.maps.LatLng(51.508515, -0.125487), 'London', 'Just some content');
-//        setMarker(map, new google.maps.LatLng(52.370216, 4.895168), 'Amsterdam', 'More content');
-//        setMarker(map, new google.maps.LatLng(48.856614, 2.352222), 'Paris', 'Text here');
+
+        scope.$watch(function($scope) {
+         return scope.stations.
+         map(function(bigObject) {
+          return bigObject;
+     });
+        }, function(){
+            deleteMarkers();
+         for(index in scope.stations){
+          var station = scope.stations[index];
+          console.log(station);
+          setMarker(map, new google.maps.LatLng(station.lat, station.long), station.name, station.id, station.status);
+         }
+        }, true);
     };
-    
+
     return {
         restrict: 'A',
         template: '<div id="gmaps"></div>',
@@ -78,4 +95,3 @@ sensorCloudApp.directive('myMap', function() {
         link: link
     };
 });
-

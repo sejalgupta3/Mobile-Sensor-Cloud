@@ -1,6 +1,6 @@
 <style>
 	#gmaps {
-	    width: 1000px;
+	    width: 650px;
 		height: 700px;
 	}
 </style>
@@ -28,7 +28,8 @@
         				<div class="switch">
            			 		<label>
             				 	Off
-             			 		<input type="checkbox" ng-model="isChecked" ng-change = "changeStationStatus(station.id, isChecked)" ng-checked="true">
+             			 		<input type="checkbox" ng-model="station.status"
+	ng-true-value="'active'" ng-false-value="'inactive'">
              			 		<span class="lever"></span>
              				  	On
            			 		</label>
@@ -39,7 +40,7 @@
       	</table>
 	</div>
 	<div class="col s8" >
-      	<div ng-if="flag"> 
+      	<div ng-if="flag">
 			<div my-map="" stations="stations"></div>
 		</div>
   	</div>

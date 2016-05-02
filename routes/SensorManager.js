@@ -28,7 +28,7 @@ exports.editStation = function (req, res) {
      console.log(req.param("id"));
      console.log(stationId);
 
-     
+
     for (index in stations) {
         var station = stations[index]
         if(station.id == stationId){
@@ -117,3 +117,28 @@ exports.deleteSensor = function (req, res) {
     }
 	res.send(stations);
 };
+
+exports.showSelectedSensorTypeStations = function(req,res) {
+
+    var requestedsensortype = req.param("selectedType")
+    var requestedStations = [];
+
+    if (requestedsensortype == "All") {
+        requestedStations = stations;
+    }else {
+        for (var index in stations) {
+            var station = stations[index];
+            var sensorList = station.sensorList;
+
+            for (id in sensorList) {
+                var sensor = sensorList[id];
+                var sensorType = sensor.type;
+                if ( sensorType == requestedsensortype) {
+                    requestedStations.push(station);
+                    break;
+                }
+            }
+        }
+    }
+    res.send(requestedStations);
+}
