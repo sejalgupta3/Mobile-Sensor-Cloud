@@ -26,6 +26,8 @@
     
     <!--Let browser know website is optimized for mobile-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAgYPa3rFTfvxYkwI6EQxD12w5zKmbC4I0&callback=initMap"
+        async defer></script>
   </head>
   <body ng-app="mobileSensorCloud">
   	
@@ -33,9 +35,13 @@
   	<ui-view/>
  	
   	<!-- App JS -->
+  
+  	<script src="/javascript/script.js"></script>
   	<script src="/javascript/angular/application.js"></script>
   	<script src="/javascript/angular/routes.js"></script>
   	<script src="/javascript/angular/service.js"></script>
   	<script src="/javascript/angular/controller.js"></script>
+  	<script src="/javascript/angular/directive.js"></script>
+  	
   </body>
 </html>

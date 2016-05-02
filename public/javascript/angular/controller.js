@@ -99,3 +99,52 @@ sensorCloudApp.controller('sensorManagerController', function($scope, $statePara
 	}
 });
 
+sensorCloudApp.controller('sensorControlController', function($scope, $http, stationService){
+	$scope.flag = false;
+	stationService.getStationList(function(list){
+		$scope.stations = list;
+		$scope.flag = true;
+	});
+	
+	$scope.selectValues = ["All","Temperature", "Humidity"];
+
+    $scope.choseSensorType = function() {
+        var userValues = {
+          selectedType : $scope.selectedSensorType
+        };
+        $http.post('/retreiveStationInfo', userValues)
+	       .success(function(res) {
+	           $scope.stations = [];
+	           deleteMarkers();
+	        for(var sensorObjectid in res)   {
+	            var sensorObject = res[sensorObjectid];
+	            var myLatlng = new google.maps.LatLng(sensorObject.lat,sensorObject.lng);
+	            addMarker(myLatlng, sensorObject.name);
+	            $scope.stations.push(res[sensorObjectid]);
+	        }
+	        setMarkerIcon($scope.selectedSensorType);
+	       })
+	       .error(function(res) {
+	           console.log('Error: ' + res);
+	       });
+    }
+
+    $scope.changeStationStatus = function(stationId, isChecked) {
+    	console.log(stationId);
+    	for(index in $scope.stations){
+    		var station = $scope.stations[index];
+    		if(stationId = station.id){
+    			console.log(isChecked);
+    			console.log($scope.stations[index].status);
+    			if(isChecked){
+    				$scope.stations[index].status = 'active';
+    			}else{
+    				$scope.stations[index].status = 'inactive';
+    			}
+    			console.log($scope.stations[index].status);
+    		}
+    	}
+    	console.log($scope.stations);
+    }
+});
+

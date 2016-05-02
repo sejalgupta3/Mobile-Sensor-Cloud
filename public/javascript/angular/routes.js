@@ -78,5 +78,11 @@ sensorCloudApp.config(function($stateProvider, $urlRouterProvider) {
 	        parent: 'adminNavigation',
 	        templateUrl: '/partials/editSensor.ejs',
 	        controller: 'sensorManagerController'
+	    })
+	    .state('sensorController', {
+			url: '/sensorController',
+	        parent: 'adminNavigation',
+	        templateUrl: '/partials/sensorController.ejs',
+	        controller: 'sensorControlController'
 	    });
 	});

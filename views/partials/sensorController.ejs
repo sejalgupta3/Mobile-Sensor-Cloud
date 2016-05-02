@@ -1,0 +1,46 @@
+<style>
+	#gmaps {
+	    width: 1000px;
+		height: 700px;
+	}
+</style>
+<div class="row">
+	<div>
+       	<select class="browser-default" ng-model="selectedSensorType" ng-change = "choseSensorType()" material-select>
+       		<option ng-repeat="value in selectValues">{{value}}</option>
+       	</select>
+   	</div>
+</div>
+<div class="row">
+	<div class="col s4" style="padding:2%">
+    	<table>
+        	<thead>
+            	<tr>
+                	<th data-field="id">Station Name</th>
+                    <th data-field="name">On/Off</th>
+
+               	</tr>
+           	</thead>
+        	<tbody>
+            	<tr ng-repeat = "station in stations">
+                	<td>{{station.name}}</td>
+                   	<td><!-- Switch -->
+        				<div class="switch">
+           			 		<label>
+            				 	Off
+             			 		<input type="checkbox" ng-model="isChecked" ng-change = "changeStationStatus(station.id, isChecked)" ng-checked="true">
+             			 		<span class="lever"></span>
+             				  	On
+           			 		</label>
+                 		</div>
+       				</td>
+            	</tr>
+             </tbody>
+      	</table>
+	</div>
+	<div class="col s8" >
+      	<div ng-if="flag"> 
+			<div my-map="" stations="stations"></div>
+		</div>
+  	</div>
+</div>
