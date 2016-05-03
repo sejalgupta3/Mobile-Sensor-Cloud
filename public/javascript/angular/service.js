@@ -16,7 +16,7 @@ sensorCloudApp.service('userService', function($http, $state){
 		userData.lastName = lname;
 		userData.email = email;
 		userData.username = username;
-		userData.password = password;W
+		userData.password = password;
 		
 		$http.post('/register', JSON.stringify(userData))
 			.success(function(res){
