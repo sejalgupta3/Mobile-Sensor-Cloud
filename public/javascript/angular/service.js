@@ -66,9 +66,10 @@ sensorCloudApp.service('verifyUserService', function($http, $state){
 });
 
 sensorCloudApp.service('sensorDataService', function($http, $state){
-	this.getSensorData = function(){
-		$http.post('/getSensorLatestData')
+	this.getSensorData = function(id, callback){
+		$http.post('/getSensorLatestData', JSON.stringify({id: id}))
 			.success(function(res){
+				callback(res);
 			}
 		);
 	};
@@ -170,6 +171,14 @@ sensorCloudApp.service('sensorService', function($http, $state){
 	
 	this.deleteSensor = function(station, name, callback){
 		$http.post('/deleteSensor', JSON.stringify({id: station, name: name}))
+			.success(function(res){
+				callback(res);
+			}
+		);
+	}
+	
+	this.getSensorTypes = function(callback){
+		$http.get('/getSensorTypes')
 			.success(function(res){
 				callback(res);
 			}

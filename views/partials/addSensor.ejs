@@ -14,7 +14,9 @@
 			</div>
 			<div class="row">
 				<div class="input-field col s12">
-	          		<input id="sensorType" type="text" class="validate" ng-model="sensorType">
+					<select class="browser-default" ng-model="sensorType" material-select>
+			       		<option ng-repeat="value in selectValues">{{value}}</option>
+			   		</select>
 	          		<label for="sensorType">Station Type</label>
 	        	</div>
 			</div>
