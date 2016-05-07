@@ -21,7 +21,7 @@ sensorCloudApp.directive('myMap', function() {
         }
 
         // place a marker
-        function setMarker(map, position, title, content, status) {
+        function setMarker(map, position, title, id ,content, status) {
             var marker;
             var color;
             if(status == 'active'){
@@ -32,7 +32,7 @@ sensorCloudApp.directive('myMap', function() {
             var markerOptions = {
                 position: position,
                 map: map,
-                title: title,
+                title: title,       
                 icon: 'https://maps.google.com/mapfiles/ms/icons/'+color+'-dot.png'
             };
 
@@ -44,11 +44,10 @@ sensorCloudApp.directive('myMap', function() {
                 if (infoWindow !== void 0) {
                     infoWindow.close();
                 }
+                
                 // create new window
-                var infoWindowOptions = {
-                    content: content
-                };
-                infoWindow = new google.maps.InfoWindow(infoWindowOptions);
+                infoWindow = new google.maps.InfoWindow();
+                infoWindow.setContent('<div><strong>' + title + '</strong></div><div>'+ content +'</div><div><a href="#/stationData/'+id+'">Read More</a></div>');
                 infoWindow.open(map, marker);
             });
         }
@@ -80,7 +79,16 @@ sensorCloudApp.directive('myMap', function() {
          for(index in scope.stations){
           var station = scope.stations[index];
           console.log(station);
-          setMarker(map, new google.maps.LatLng(station.lat, station.long), station.name, station.id, station.status);
+          var sensorList = '';
+          for(index in station.sensorList){
+        	  var sensor = station.sensorList[index];
+        	  if(index == station.sensorList.length-1){
+        		  sensorList = sensorList + ' ' + sensor.type
+        	  }else{
+        		  sensorList = sensorList + ' ' + sensor.type + ','
+        	  }  
+          }
+          setMarker(map, new google.maps.LatLng(station.lat, station.long), station.name, station.id, sensorList, station.status);
          }
         }, true);
     };
