@@ -1,5 +1,7 @@
 var users = [];
 var station = [];
+var mongo = require("./mongo");
+var mongoURL = "mongodb://localhost:27017/sensor";
 
 exports.index = function(req, res){
 	res.render('index');
@@ -11,25 +13,47 @@ exports.partials = function (req, res) {
 };
 
 exports.register = function (req, res) {
-	users.push(req.body);
-	res.send("Registration Successful.");
+	var email , pwd  , firstname, lastname  ;
+	firstname = req.body.firstName;
+	lastname = req.body.lastName;
+	email = req.body.email;
+	pwd = req.body.password;
+	
+	mongo.connect(mongoURL, function(){
+		console.log('Connected to mongo at: ' + mongoURL);
+		var coll = mongo.collection('users');
+		coll.insert({firstname: firstname, lastname:lastname, email:email, password : pwd , station : [] }, function(err, user){
+			if (user) {
+				console.log( "Inserted Id " + user.insertedIds);
+				console.log("Successful Registration");
+				res.send("Registration Successful");
+
+			} else {
+				console.log("Invalid Registration");
+				res.send("Registration UnSuccessful");
+			}
+		});
+	});
 };
 
 exports.validateUser = function(req, res){
-	for(var i=0; i<users.length; i++){
-		var currentUser = users[i];
-		if(currentUser.username == req.body.username && currentUser.password == req.body.password){
-			if(currentUser.userType == 'endUser'){
+	var username , password   ;
+	username = req.body.username;
+	password = req.body.password;
+	
+	mongo.connect(mongoURL, function(){
+		console.log('Connected to mongo at: ' + mongoURL);
+		var coll = mongo.collection('users');
+		coll.findOne({email: username, password:password }, function(err, user){
+			if (user) {
+				console.log( "Inserted Id " + user.insertedIds);
+				console.log("Successful Registration");
 				res.send({message:'Login Successful',userType:"endUser"});
-			}else{
-				res.send({message:'Login Successful',userType:"admin"});
-			}
-		}
-	}
-	res.send({message:'Login Unsuccessful'});
-};
 
-exports.addStation = function (req, res) {
-	station.push(req.body);
-	res.send("Station added Successful.");
+			} else {
+				console.log("Invalid Registration");
+				res.send({message:'Login Unsuccessful'});
+			}
+		});
+	});
 };
