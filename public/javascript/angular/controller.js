@@ -34,7 +34,7 @@ sensorCloudApp.controller('sensorManagerController', function($scope, $statePara
 		getStation();
 		getSensor();
 	});
-	
+		
 	sensorService.getSensorTypes(function(data){
 		$scope.selectValues = data;
 	});
@@ -126,6 +126,12 @@ sensorCloudApp.controller('sensorControlController', function($scope, $http, sta
 	       .error(function(res) {
 	    	   console.log('Error: ' + res);
 	       });
+    }
+    
+    $scope.changeStationStatus = function(stationId, stationName){
+    	if(confirm("Are you sure you want to change the status of the station " + stationName )){
+    		stationService.changeStationStatus(stationId);
+    	}
     }
 });
 

@@ -133,6 +133,14 @@ sensorCloudApp.service('stationService', function($http, $state){
 			}
 		);
 	}
+	
+	this.changeStationStatus = function(stationId){
+		$http.post('/changeStationStatus', JSON.stringify({id: stationId}))
+		.success(function(res){
+				console.log("Station status changed successfully.");
+			}
+		);
+	}
 });
 
 sensorCloudApp.service('sensorService', function($http, $state){

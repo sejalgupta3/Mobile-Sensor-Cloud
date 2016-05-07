@@ -28,7 +28,7 @@
         				<div class="switch">
            			 		<label>
             				 	Off
-             			 		<input type="checkbox" ng-model="station.status" ng-true-value="'active'" ng-false-value="'inactive'">
+             			 		<input type="checkbox" ng-model="station.status" ng-true-value="'active'" ng-false-value="'inactive'" ng-change="changeStationStatus(station.id, station.name)">
              			 		<span class="lever"></span>
              					On
            			 		</label>

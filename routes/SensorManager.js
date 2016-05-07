@@ -158,9 +158,23 @@ exports.showSelectedSensorTypeStations = function(req,res) {
     res.send(requestedStations);
 }
 
+exports.changeSensorStatus = function(req, res){
+	var stationId = req.body.id;
+	for(index in stations){
+		var station = stations[index];
+		if(stationId == station.id){
+			if(station.status == 'active'){
+				station.status = 'inactive';
+			}else{
+				station.status = 'active';
+			}
+			res.send("Success");
+		}
+	}
+}
+
 exports.getSensorLatestData = function(req, res){
 	var stationId = req.body.id;
-	console.log(stationId);
 	return http.get({
         host: 'www.ndbc.noaa.gov',
         path: '/data/realtime2/'+stationId+'.txt'
