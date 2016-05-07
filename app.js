@@ -28,9 +28,10 @@ if ('development' == app.get('env')) {
 
 app.get('/', routes.index);
 app.get('/partials/:name', routes.partials);
+app.get('/getSensorTypes', sensorManager.getSensorTypes);
 app.post('/register', routes.register);
 app.post('/login', routes.validateUser);
-app.post('/getSensorLatestData', routes.getSensorLatestData);
+app.post('/getSensorLatestData', sensorManager.getSensorLatestData);
 app.post('/addStation', sensorManager.addStation);
 app.post('/editStation', sensorManager.editStation);
 app.post('/deleteStation', sensorManager.deleteStation);

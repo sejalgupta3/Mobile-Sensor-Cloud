@@ -1,14 +1,25 @@
 
-//var station = {
-//    name : "",
-//    id : "",
-//    lat : "",
-//    long : "",
-//    status : "",
-//    sensorList : ""
-//}
+var sensorColumn = {
+		"WDIR":"5",
+		"SPD":"6",
+		"GST":"7",
+		"WVHT":"8",
+		"DPD":"9",
+		"APD":"10",
+		"MWD":"11",
+		"PRES":"12",
+		"ATMP":"13",
+		"WTMP":"14",
+		"DEWP":"15",
+		"VIS":"16",
+		"PTDY":"17",
+		"TIDE":"18",
+};
+
+var sensorTypes = ["Air Temperature", "Conductivity", "Currents", "Salinity", "Sea Level Pressure", "Water Level", "Water Temperature", "Waves", "Winds"];
 
 var stations = [];
+var http = require('http');
 
 exports.getStationList = function(req, res) {
     res.send(stations);
@@ -118,6 +129,10 @@ exports.deleteSensor = function (req, res) {
 	res.send(stations);
 };
 
+exports.getSensorTypes = function (req, res) {
+	res.send(sensorTypes);
+};
+
 exports.showSelectedSensorTypeStations = function(req,res) {
 
     var requestedsensortype = req.param("selectedType")
@@ -141,4 +156,46 @@ exports.showSelectedSensorTypeStations = function(req,res) {
         }
     }
     res.send(requestedStations);
+}
+
+exports.getSensorLatestData = function(req, res){
+	var stationId = req.body.id;
+	console.log(stationId);
+	return http.get({
+        host: 'www.ndbc.noaa.gov',
+        path: '/data/realtime2/'+stationId+'.txt'
+    }, function(response) {
+        // Continuously update stream with data
+        var body = '';
+        response.on('data', function(d) {
+            body += d;
+        });
+        var prevDate = '';
+        response.on('end', function() {
+        	var data = body.split("\n");
+        	var stationData = [];
+        	for(var i=2; i<data.length; i++){
+        		var dataRow = data[i].replace( /\s\s+/g, ' ' ).split(" ");
+        		if(dataRow[2] != prevDate){
+        			prevDate = dataRow[2];
+        			var dataObject = {
+                		date : '',
+                		dataArray : []
+                	}
+            		dataObject.date = dataRow[1] + '/' + dataRow[2] +  '/' + dataRow[0];
+        			for(index in stations){
+        				var station = stations[index];
+        				if(station.id == stationId){
+        					for(j in station.sensorList){
+        						var sensor = station.sensorList[j];
+        						dataObject.dataArray.push({sensorId : sensor.name , data:  dataRow[sensorColumn[sensor.name]]});
+        					}
+        				}
+        			}
+            		stationData.push(dataObject);
+        		}
+        	}
+            res.send(stationData);
+        });
+    });
 }
