@@ -1,0 +1,21 @@
+<style>
+	#gmaps {
+	    width: auto;
+		height: 600px;
+	}
+</style>
+
+<div class="row">
+	<div>
+    	<select class="browser-default" ng-model="selectedSensorType" ng-change = "choseSensorType()" material-select>
+       		<option ng-repeat="value in selectValues">{{value}}</option>
+   		</select>
+	</div>
+</div>
+<div class="row">
+	<div class="col m12" style="padding:2%">
+      	<div ng-if="flag">
+			<div my-map="" stations="stations"></div>
+		</div>
+  	</div>
+</div>

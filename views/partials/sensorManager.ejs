@@ -1,8 +1,13 @@
-<div style="padding:3%;">
-	<div class="row right-align">
-		<a class="waves-effect waves-light btn #283593 indigo darken-3" href="#/addStation">Add Station</a>
+<div style="padding:2%;">
+	<div class="row">
+		<div class="col m6">
+			<label>Search Station: <input ng-model="searchText"></label>
+		</div>
+		<div class="col m6 right-align">
+			<a class="waves-effect waves-light btn #283593 indigo darken-3" href="#/addStation">Add Station</a>
+		</div>
 	</div>
-	<div class="row" style="padding:5%;" ng-repeat="station in stationList">
+	<div class="row" style="padding:2%;" ng-repeat="station in stationList| filter:searchText">
 		<table class="bordered highlight">
 			<thead>
 				<span id="stationName">{{station.name}}</span>

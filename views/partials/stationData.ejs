@@ -1,0 +1,14 @@
+<table class="striped ">
+	<thead>
+		<tr>
+			<th>Date</th>
+			<th ng-repeat="sensor in dataSet[0].dataArray">{{sensor.sensorId}}</th>		
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="data in dataSet">
+			<td>{{data.date}}</td>
+			<td ng-repeat = "sensor in data.dataArray ">{{sensor.data}}</td>
+		</tr>
+	</tbody>
+</table>

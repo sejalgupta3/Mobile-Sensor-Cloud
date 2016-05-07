@@ -69,3 +69,8 @@ main{
 .stationButtons a{
 	font-size:0.8em;
 }
+
+label{
+	color: black;
+	font-size: 1.3em;
+}

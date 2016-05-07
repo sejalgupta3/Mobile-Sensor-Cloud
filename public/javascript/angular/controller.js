@@ -34,7 +34,11 @@ sensorCloudApp.controller('sensorManagerController', function($scope, $statePara
 		getStation();
 		getSensor();
 	});
-
+	
+	sensorService.getSensorTypes(function(data){
+		$scope.selectValues = data;
+	});
+	
 	var getStation = function(){
 		if($scope.selectedStataionId){
 			for(index in $scope.stationList){
@@ -99,39 +103,60 @@ sensorCloudApp.controller('sensorManagerController', function($scope, $statePara
 	}
 });
 
-sensorCloudApp.controller('sensorControlController', function($scope, $http, stationService){
+sensorCloudApp.controller('sensorControlController', function($scope, $http, stationService, sensorService){
 	$scope.flag = false;
+	
 	stationService.getStationList(function(list){
 		$scope.stations = list;
 		$scope.flag = true;
 	});
-
-	$scope.selectValues = ["All","Temperature", "Humidity", "Airquality", "Waterquality"];
-
+	
+	sensorService.getSensorTypes(function(data){
+		$scope.selectValues = data;
+	});
+	
     $scope.choseSensorType = function() {
         var userValues = {
-          selectedType : $scope.selectedSensorType
+        	selectedType : $scope.selectedSensorType
         };
         $http.post('/retreiveSelectedSensorTypeStations', userValues)
-	       .success(function(res) {
-	           $scope.stations = res;
-	       })
+	    	.success(function(res) {
+	    		$scope.stations = res;
+	    	})
 	       .error(function(res) {
-	           console.log('Error: ' + res);
+	    	   console.log('Error: ' + res);
 	       });
     }
+});
 
-    $scope.changeStationStatus = function(stationId, isChecked, station) {
+//sensorCloudApp.controller('userSensorDataController', function($scope, $http, stationService, sensorService){
+//	$scope.flag = false;
+//	
+//	stationService.getStationList(function(list){
+//		$scope.stations = list;
+//		$scope.flag = true;
+//	});
+//
+//	sensorService.getSensorTypes(function(data){
+//		$scope.selectValues = data;
+//	});
+//	
+//    $scope.choseSensorType = function() {
+//        var userValues = {
+//          selectedType : $scope.selectedSensorType
+//        };
+//        $http.post('/retreiveSelectedSensorTypeStations', userValues)
+//	       .success(function(res) {
+//	           $scope.stations = res;
+//	       })
+//	       .error(function(res) {
+//	           console.log('Error: ' + res);
+//	       });
+//    }
+//});
 
-    			if(station.status == "inactive"){
-					station.status == "active"
-    				// $scope.stations[index].status = 'active';
-					// isChecked == "active"
-    			}else{
-					station.status == "inactive"
-    				// $scope.stations[index].status = 'inactive';
-					// isChecked == "inactive"
-    			}
-
-    }
+sensorCloudApp.controller('sensorDataController', function($scope, $http, $stateParams, sensorDataService){
+	sensorDataService.getSensorData($stateParams.stationId, function(data){
+		$scope.dataSet = data;
+	});
 });
