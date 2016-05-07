@@ -1,5 +1,4 @@
 var users = [];
-var http = require('http');
 var station = [];
 
 exports.index = function(req, res){
@@ -29,26 +28,6 @@ exports.validateUser = function(req, res){
 	}
 	res.send({message:'Login Unsuccessful'});
 };
-
-exports.getSensorLatestData = function(req, res){
-	var sensorId = "TDPC1";
-	return http.get({
-        host: 'www.ndbc.noaa.gov',
-        path: '/data/realtime2/TDPC1.txt'
-    }, function(response) {
-        // Continuously update stream with data
-        var body = '';
-        response.on('data', function(d) {
-            body += d;
-        });
-        response.on('end', function() {
-        	var data = body.split("\n");
-        	//console.log(data);
-        	var readings = data[2].replace( /\s\s+/g, ' ' ).split(" ");
-            console.log("Latest Temperater data:"+readings[14]);
-        });
-    });
-}
 
 exports.addStation = function (req, res) {
 	station.push(req.body);
