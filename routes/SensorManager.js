@@ -41,6 +41,7 @@ exports.getStationList = function(req, res) {
 	});
 }
 
+
 exports.addStation = function (req, res) {
 	var name , id  , lat, long ,status  ;
 	name = req.body.name;
@@ -98,7 +99,7 @@ exports.editStation = function (req, res) {
 
 exports.deleteStation = function (req, res) {
 	var stationId = req.param("id");
-    console.log(stationId);
+    console.log("Delete id " + req.body.id + " " + stationId );
     mongo.connect(mongoURL, function(){
  		console.log('Connected to mongo at: ' + mongoURL);
  		var coll = mongo.collection('station');
@@ -120,8 +121,23 @@ exports.addSensor = function (req, res) {
     var sensorName = req.param("name");
     var sensorType = req.param("type");
     var sensorStatus = req.param("status");
+    
+    mongo.connect(mongoURL, function(){
+		console.log('Connected to mongo at: ' + mongoURL);
+		var coll = mongo.collection('sensor');
+		coll.insert({sensorName: sensorName, sensorType:sensorType, sensorStatus:"active", stationId : stationId }, function(err, result){
+			if (result) {
+				console.log( "Inserted Id " + result.insertedIds);
+				res.send("Sensor Added Successful");
 
-    var sensorToadd = { name: sensorName, type : sensorType, status : sensorStatus}
+			} else {
+				console.log("Problem in Adding sensor");
+				res.send("Problem in Adding sensor ");
+			}
+		});
+	});
+
+  /*  var sensorToadd = { name: sensorName, type : sensorType, status : sensorStatus}
 
     var station;
     console.log(stations);
@@ -136,7 +152,7 @@ exports.addSensor = function (req, res) {
             station.sensorList.push(sensorToadd);
         }
     }
-	res.send(station);
+	res.send(station);*/
 };
 
 exports.editSensor = function (req, res) {
@@ -163,7 +179,24 @@ exports.deleteSensor = function (req, res) {
     var stationId = req.param("id");
     var sensorName = req.param("name");
     var station;
-    for (index in stations) {
+    console.log("in delete sensorrrr " + stationId + " " + sensorName);
+   mongo.connect(mongoURL, function(){
+ 		console.log('Connected to mongo at: ' + mongoURL);
+ 		var coll = mongo.collection('sensor');
+ 		coll.remove({  stationId: stationId , sensorName : sensorName
+ 			   },function(err, user){
+ 			if (user) {
+ 				console.log("done");
+ 				res.send("Delete sensor successful");
+
+ 			} else {
+ 				console.log("undone");
+ 				res.send("Error Delete sensor");
+ 			}
+ 		});
+
+ 	});
+    /*for (index in stations) {
      station = stations[index]
         if(station.id == stationId){
             var sensorList = station.sensorList;
@@ -174,12 +207,29 @@ exports.deleteSensor = function (req, res) {
                 }
             }
         }
-    }
-	res.send(stations);
+    }*/
+	//res.send(stations);
 };
 
 exports.getSensorTypes = function (req, res) {
 	res.send(sensorTypes);
+};
+
+exports.getSensorList = function(req, res) {
+	mongo.connect(mongoURL, function(){
+		console.log('Connected to mongo at: ' + mongoURL);
+		var coll = mongo.collection('sensor');
+		coll.find({}).toArray(function(err, result){
+			if (result) {
+				console.log(result);
+				 res.send(result);
+
+			} else {
+				console.log("Problem Displaying station");
+				res.send("Problem Displaying station ");
+			}
+		});
+	});
 };
 
 exports.showSelectedSensorTypeStations = function(req,res) {

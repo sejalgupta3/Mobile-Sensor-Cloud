@@ -31,9 +31,14 @@ sensorCloudApp.controller('sensorManagerController', function($scope, $statePara
 
 	stationService.getStationList(function(list){
 		$scope.stationList = list;
-		getStation();
-		getSensor();
+	//	getStation();
+		sensorService.getSensorList(function(sensor){
+			$scope.sensorList = sensor;
+		});
+		
 	});
+	
+	
 		
 	sensorService.getSensorTypes(function(data){
 		$scope.selectValues = data;
@@ -78,10 +83,13 @@ sensorCloudApp.controller('sensorManagerController', function($scope, $statePara
 		stationService.editStation($scope.stationName, $scope.stationId, $scope.lat, $scope.lng);
 	}
 
-	$scope.confirmDeleteStation = function(selectedStataionId){
-		if(confirm("Are you sure you want to delete the station")){
-			stationService.deleteStation(selectedStataionId, function(list){
-				$scope.stationList = list;
+	$scope.confirmDeleteStation = function(selectedStationId){
+		if(confirm("Are you sure you want to delete the station " + selectedStationId)){
+			stationService.deleteStation(selectedStationId, function(res){
+				stationService.getStationList(function(list){
+					$scope.stationList = list;
+					alert(res);
+				});
 			});
 		}
 	}
@@ -94,10 +102,15 @@ sensorCloudApp.controller('sensorManagerController', function($scope, $statePara
 		sensorService.editSensor($scope.sensorName, $scope.sensorType, $scope.selectedStataionId);
 	}
 
-	$scope.confirmDeleteSensor = function(selectedStataionId, selectedSensorName){
-		if(confirm("Are you sure you want to delete the sensor")){
-			sensorService.deleteSensor(selectedStataionId, selectedSensorName, function(list){
-				$scope.stationList = list;
+	$scope.confirmDeleteSensor = function(selectedStationId, selectedSensorName){
+		if(confirm("Are you sure you want to delete the sensor" + selectedStationId + " " + selectedSensorName  )){
+			sensorService.deleteSensor(selectedStationId, selectedSensorName, function(res){
+				sensorService.getSensorList(function(sensor){
+					$scope.sensorList = sensor;
+					alert(res);
+				});
+			//	$scope.stationList = list;
+				
 			});
 		}
 	}

@@ -129,6 +129,7 @@ sensorCloudApp.service('stationService', function($http, $state){
 	this.deleteStation = function(id, callback){
 		$http.post('/deleteStation', JSON.stringify({id: id}))
 			.success(function(res){
+				
 				callback(res);
 			}
 		);
@@ -176,6 +177,15 @@ sensorCloudApp.service('sensorService', function($http, $state){
 			}
 		);
 	}
+	
+	this.getSensorList = function(callback){
+		$http.get('/getSensorList')
+		.success(function(res){
+			callback(res);
+		}
+	);
+	}
+	
 	
 	this.deleteSensor = function(station, name, callback){
 		$http.post('/deleteSensor', JSON.stringify({id: station, name: name}))
