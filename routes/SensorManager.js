@@ -16,54 +16,103 @@ var sensorColumn = {
 		"TIDE":"18",
 };
 
+var mongo = require("./mongo");
+var mongoURL = "mongodb://localhost:27017/sensor";
+
 var sensorTypes = ["Air Temperature", "Conductivity", "Currents", "Salinity", "Sea Level Pressure", "Water Level", "Water Temperature", "Waves", "Winds"];
 
 var stations = [];
 var http = require('http');
 
 exports.getStationList = function(req, res) {
-    res.send(stations);
+	mongo.connect(mongoURL, function(){
+		console.log('Connected to mongo at: ' + mongoURL);
+		var coll = mongo.collection('station');
+		coll.find({}).toArray(function(err, result){
+			if (result) {
+				console.log(result);
+				 res.send(result);
+
+			} else {
+				console.log("Problem Displaying station");
+				res.send("Problem Displaying station ");
+			}
+		});
+	});
 }
 
 exports.addStation = function (req, res) {
-	stations.push(req.body);
-	res.send(stations);
+	var name , id  , lat, long ,status  ;
+	name = req.body.name;
+	id = req.body.id;
+	lat = req.body.lat;
+	long = req.body.long;
+	status =  req.body.status;
+	
+	mongo.connect(mongoURL, function(){
+		console.log('Connected to mongo at: ' + mongoURL);
+		var coll = mongo.collection('station');
+		coll.insert({stationName: name, stationId:id, stationLat:lat, stationLong : long , stationStatus : status }, function(err, result){
+			if (result) {
+				console.log( "Inserted Id " + result.insertedIds);
+				res.send("Station Added Successful");
+
+			} else {
+				console.log("Problem in Adding station");
+				res.send("Problem in Adding station ");
+			}
+		});
+	});
 };
 
 exports.editStation = function (req, res) {
-    var stationId = req.param("id");
+	var stationId = req.param("id");
     var stationName = req.param("name");
     var stationLat = req.param("lat");
     var stationLong = req.param("long");
     var stationStatus = req.param("status");
      console.log(req.param("id"));
-     console.log(stationId);
 
+     mongo.connect(mongoURL, function(){
+ 		console.log('Connected to mongo at: ' + mongoURL);
+ 		var coll = mongo.collection('station');
+ 		coll.update({ station_id: stationId },
+ 			   { $set:
+ 			      {
+ 				  stationName: stationName,
+ 				  stationLat: stationLat,
+ 				  stationLong: stationLong,
+ 				 stationStatus : stationStatus
+ 			      }
+ 			   },function(err, user){
+ 			if (user) {
+ 				res.send("Edit successful");
 
-    for (index in stations) {
-        var station = stations[index]
-        if(station.id == stationId){
-        	console.log(station.id);
-            station.name = stationName;
-            station.lat = stationLat;
-            station.long = stationLong;
-            station.status = stationStatus;
-            stations[index] = station;
-        }
-    }
-	res.send("edit successful");
+ 			} else {
+ 				res.send("Error Editing Station");
+ 			}
+ 		});
+
+ 	});
 };
 
 exports.deleteStation = function (req, res) {
-    var stationId = req.param("id");
+	var stationId = req.param("id");
     console.log(stationId);
-    for (index in stations) {
-        var station = stations[index]
-        if(station.id == stationId){
-            stations.splice(index,1);
-        	res.send(stations);
-        }
-    }
+    mongo.connect(mongoURL, function(){
+ 		console.log('Connected to mongo at: ' + mongoURL);
+ 		var coll = mongo.collection('station');
+ 		coll.remove({  stationId: stationId 
+ 			   },function(err, user){
+ 			if (user) {
+ 				res.send("Delete successful");
+
+ 			} else {
+ 				res.send("Error Delete Station");
+ 			}
+ 		});
+
+ 	});
 };
 
 exports.addSensor = function (req, res) {
