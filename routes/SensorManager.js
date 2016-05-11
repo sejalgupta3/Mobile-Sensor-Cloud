@@ -275,7 +275,7 @@ exports.changeSensorStatus = function(req, res){
 exports.getSensorLatestData = function(req, res){
 	
 
-	   http.get('www.ndbc.noaa.gov/data/realtime2/TIBC1.txt', function(res){
+	  /* http.get('www.ndbc.noaa.gov/data/realtime2/TIBC1.txt', function(res){
 	        var str = '';
 	        console.log('Response is '+res.statusCode);
 	        
@@ -288,8 +288,8 @@ exports.getSensorLatestData = function(req, res){
 	             console.log(str);
 	        });
 
-	  });
-	/*console.log("in getSensorLatestData " + req.body.id);
+	  });*/
+	console.log("in getSensorLatestData " + req.body.id);
 	var stationId = req.body.id;
 	return http.get({
         host: 'www.ndbc.noaa.gov',
@@ -314,11 +314,11 @@ exports.getSensorLatestData = function(req, res){
         						console.log(result);
         						var data = body.split("\n");
         			        	var stationData = [];
-        			        	var dataObject = {
+        			        	/*var dataObject = {
 			                    		date : '',
 			                    		data : '',
 			                    		sensorName : ''
-        			        	}
+        			        	}*/
         			        	for(var i=2; i<data.length; i++){
         			        		var dataRow = data[i].replace( /\s\s+/g, ' ' ).split(" ");
         			        		if(dataRow[2] != prevDate){
@@ -328,14 +328,15 @@ exports.getSensorLatestData = function(req, res){
         			                    		data : '',
         			                    		sensorName : ''
         			                    	}
-        			        			 dataOject.date = dataRow[1] + '/' + dataRow[2] +  '/' + dataRow[0];
+        			        			 dataObject.date = dataRow[1] + '/' + dataRow[2] +  '/' + dataRow[0];
         			        			 for (var j =0 ; j < result.length ;j++){
-        			        				 dataObject.data =  datarow[sensorColumn[result[j].sensorName]];
+        			        				 dataObject.data =  dataRow[sensorColumn[result[j].sensorName]];
         			        				 dataObject.sensorName = result[j].sensorName;
+        			        				 console.log (dataObject.date + " " + dataObject.data +" " + dataObject.sensorName   );
         			        				 arr.push(dataObject);
         			        			 }
         			        			
-        			            			for(index in stations){
+        			            			/*for(index in stations){
         			            				var station = stations[index];
         			            				if(station.id == stationId){
         			            					for(j in station.sensorList){
@@ -343,7 +344,7 @@ exports.getSensorLatestData = function(req, res){
         			            						dataObject.dataArray.push({sensorId : sensor.name , data:  dataRow[sensorColumn[sensor.name]]});
         			            					}
         			            				}
-        			            			}
+        			            			}*/
         			            		}
         			            	}
 
@@ -355,5 +356,5 @@ exports.getSensorLatestData = function(req, res){
         			//
             res.send(arr);
         });
-    });*/
+    });
 }
