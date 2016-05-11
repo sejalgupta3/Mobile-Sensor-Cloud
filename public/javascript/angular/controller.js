@@ -178,4 +178,110 @@ sensorCloudApp.controller('sensorDataController', function($scope, $http, $state
 	sensorDataService.getSensorData($stateParams.stationId, function(data){
 		$scope.dataSet = data;
 	});
+	$scope.sensorList = ['1','2','3'];
+	 
+	   ////
+	 $scope.ShowDriverDetails = function(s,d,t,f) {
+		   alert("inside driver");
+    	   $scope.chartConfig1 = {
+    		        options: {
+    		            chart: {
+    		                type: 'line',
+    		                
+    		            }
+    		        },
+    		         series: [{
+    		         
+    		        	 data : s,
+    		          //  pointInterval: 24 * 3600 * 1000 // one day
+    		        }],
+    		        title: {
+    		            text: 'Temperature Data'
+    		        },
+    		        xAxis: {
+    		        
+    		          categories: d
+    		        },
+    		        loading: false
+    		    }
+    	   
+    	  $scope.chartConfig2 = {
+    		        options: {
+    		            chart: {
+    		                type: 'bar',
+    		                
+    		            }
+    		        },
+    		         series: [{
+    		         
+    		        	 data : t,
+    		          //  pointInterval: 24 * 3600 * 1000 // one day
+    		        }],
+    		        title: {
+    		            text: 'Humidity Data'
+    		        },
+    		        xAxis: {
+    		        
+    		          categories: f
+    		        },
+    		        loading: false
+    		    }
+    	   
+      	  $scope.chartConfig3 = {
+    		        options: {
+    		            chart: {
+    		                type: 'pie',
+    		                
+    		            }
+    		        },
+    		         series: [{
+    		         
+    		        	 data : t,
+    		          //  pointInterval: 24 * 3600 * 1000 // one day
+    		        }],
+    		        title: {
+    		            text: 'Precipitation Data'
+    		        },
+    		        xAxis: {
+    		        
+    		          categories: f
+    		        },
+    		        loading: false
+    		    }
+    	   
+    	 $scope.chartConfig4 = {
+    		        options: {
+    		            chart: {
+    		                type: 'column',
+    		                
+    		            }
+    		        },
+    		         series: [{
+    		         
+    		        	 data : t,
+    		          //  pointInterval: 24 * 3600 * 1000 // one day
+    		        }],
+    		        title: {
+    		            text: 'Wind Cycle Data'
+    		        },
+    		        xAxis: {
+    		        
+    		          categories: f
+    		        },
+    		        loading: false
+    		    }
+ 			}
+ 
+	  $scope.getgraph= function(){
+		  			
+		  			alert("inside getgraph");
+		           	var s =[2,16,7,11],d=[2013,2014,2015,2016];
+		        	var t =[6,3,11,5,9,8],f=[2011,2012,2013,2014,2015,2016];
+	            	$scope.ShowDriverDetails(s,d,t,f); 
+	            	
+	        };
+	    $scope.getgraph(); 
+	////
+	
+	
 });

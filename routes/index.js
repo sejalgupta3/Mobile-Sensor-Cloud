@@ -25,6 +25,7 @@ exports.register = function (req, res) {
 		coll.insert({firstname: firstname, lastname:lastname, email:email, password : pwd , station : [] }, function(err, user){
 			if (user) {
 				console.log( "Inserted Id " + user.insertedIds);
+				req.session.userid=email;
 				console.log("Successful Registration");
 				res.send("Registration Successful");
 
@@ -47,7 +48,8 @@ exports.validateUser = function(req, res){
 		coll.findOne({email: username, password:password }, function(err, user){
 			if (user) {
 				console.log( "Inserted Id " + user.insertedIds);
-				console.log("Successful Registration");
+				req.session.userid=user.email;
+				console.log("Successful Login" + req.session.userid );
 				res.send({message:'Login Successful',userType:"endUser"});
 
 			} else {

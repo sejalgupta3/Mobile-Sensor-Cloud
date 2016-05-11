@@ -273,10 +273,27 @@ exports.changeSensorStatus = function(req, res){
 }
 
 exports.getSensorLatestData = function(req, res){
+	
+
+	   http.get('www.ndbc.noaa.gov/data/realtime2/TIBC1.txt', function(res){
+	        var str = '';
+	        console.log('Response is '+res.statusCode);
+	        
+	        res.on('data', function (chunk) {
+	              //console.log('BODY: ' + chunk);
+	               str += chunk;
+	         });
+
+	        res.on('end', function () {
+	             console.log(str);
+	        });
+
+	  });
+	/*console.log("in getSensorLatestData " + req.body.id);
 	var stationId = req.body.id;
 	return http.get({
         host: 'www.ndbc.noaa.gov',
-        path: '/data/realtime2/'+stationId+'.txt'
+        path: '/data/realtime2/MBXC1.txt'
     }, function(response) {
         // Continuously update stream with data
         var body = '';
@@ -285,30 +302,58 @@ exports.getSensorLatestData = function(req, res){
         });
         var prevDate = '';
         response.on('end', function() {
-        	var data = body.split("\n");
-        	var stationData = [];
-        	for(var i=2; i<data.length; i++){
-        		var dataRow = data[i].replace( /\s\s+/g, ' ' ).split(" ");
-        		if(dataRow[2] != prevDate){
-        			prevDate = dataRow[2];
-        			var dataObject = {
-                		date : '',
-                		dataArray : []
-                	}
-            		dataObject.date = dataRow[1] + '/' + dataRow[2] +  '/' + dataRow[0];
-        			for(index in stations){
-        				var station = stations[index];
-        				if(station.id == stationId){
-        					for(j in station.sensorList){
-        						var sensor = station.sensorList[j];
-        						dataObject.dataArray.push({sensorId : sensor.name , data:  dataRow[sensorColumn[sensor.name]]});
+        	var arr =[];	
+        			
+        			/////////
+        			mongo.connect(mongoURL, function(){
+        				console.log('Connected to mongo at: ' + mongoURL);
+        				var coll = mongo.collection('sensor');
+        				coll.find({stationId : stationId }).toArray(function(err, result){
+        					if (result) {
+        						console.log("Result:" +  result);
+        						console.log(result);
+        						var data = body.split("\n");
+        			        	var stationData = [];
+        			        	var dataObject = {
+			                    		date : '',
+			                    		data : '',
+			                    		sensorName : ''
+        			        	}
+        			        	for(var i=2; i<data.length; i++){
+        			        		var dataRow = data[i].replace( /\s\s+/g, ' ' ).split(" ");
+        			        		if(dataRow[2] != prevDate){
+        			        			prevDate = dataRow[2];
+        			        			var dataObject = {
+        			                    		date : '',
+        			                    		data : '',
+        			                    		sensorName : ''
+        			                    	}
+        			        			 dataOject.date = dataRow[1] + '/' + dataRow[2] +  '/' + dataRow[0];
+        			        			 for (var j =0 ; j < result.length ;j++){
+        			        				 dataObject.data =  datarow[sensorColumn[result[j].sensorName]];
+        			        				 dataObject.sensorName = result[j].sensorName;
+        			        				 arr.push(dataObject);
+        			        			 }
+        			        			
+        			            			for(index in stations){
+        			            				var station = stations[index];
+        			            				if(station.id == stationId){
+        			            					for(j in station.sensorList){
+        			            						var sensor = station.sensorList[j];
+        			            						dataObject.dataArray.push({sensorId : sensor.name , data:  dataRow[sensorColumn[sensor.name]]});
+        			            					}
+        			            				}
+        			            			}
+        			            		}
+        			            	}
+
+        					} else {
+        						console.log("Problem Displaying station");
         					}
-        				}
-        			}
-            		stationData.push(dataObject);
-        		}
-        	}
-            res.send(stationData);
+        				});
+        			});
+        			//
+            res.send(arr);
         });
-    });
+    });*/
 }

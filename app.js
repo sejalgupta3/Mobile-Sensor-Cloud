@@ -10,6 +10,11 @@ var express = require('express')
 var app = express();
 var sensorManager = require('./routes/SensorManager')
 
+
+app.use(express.cookieParser());
+app.use(express.session({ secret: 'keyboard cat',duration: 30 * 60 * 1000, activeDuration: 5 * 60 * 1000}));
+
+
 // all environments
 app.set('port', process.env.PORT || 3000);
 app.set('views', __dirname + '/views');

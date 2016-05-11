@@ -1,3 +1,22 @@
+
+	
+			<div class="row"  ng-repeat = "data in sensorList">
+				<div class="col m3 ">
+					 <highchart id="chart1" config="chartConfig1" class="span10" ng-hide= "temp"></highchart>
+				</div>	 
+				 
+				<div class="col m3">
+					  <highchart id="chart1" config="chartConfig2" class="span10" ng-hide="humidity"></highchart>
+				</div>	  
+				
+				<div class="col m3">
+					   <highchart id="chart1" config="chartConfig3" class="span10"></highchart>
+				</div>
+				<div class="col m3">
+					   <highchart id="chart1" config="chartConfig4" class="span10"></highchart>
+				</div>
+			</div>		
+<!-- 
 <table class="striped ">
 	<thead>
 		<tr>
@@ -11,4 +30,4 @@
 			<td ng-repeat = "sensor in data.dataArray ">{{sensor.data}}</td>
 		</tr>
 	</tbody>
-</table>
+</table> -->

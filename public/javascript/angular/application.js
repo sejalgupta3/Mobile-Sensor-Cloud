@@ -1,3 +1,3 @@
 var sensorCloudApp = angular.module('mobileSensorCloud', [
-	'ui.router'                                                       
+	'ui.router','highcharts-ng'                                                      
 ]);
