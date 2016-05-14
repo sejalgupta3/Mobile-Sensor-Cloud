@@ -25,6 +25,19 @@ sensorCloudApp.controller('userDashboardController', function($scope, $http, sen
 	//sensorDataService.getSensorData();
 });
 
+
+sensorCloudApp.controller('editsensorManagerController', function($scope,$stateParams, $http,stationService){
+	$scope.name = "Neha";
+	var selectedStationId = $stateParams.stationId;
+	alert(selectedStationId);
+	stationService.getStationDetails(selectedStationId,function(list){
+		$scope.stationList = list;
+		alert(list);
+	});
+	
+	
+});
+
 sensorCloudApp.controller('sensorManagerController', function($scope, $stateParams ,$http, sensorService, stationService){
 	$scope.selectedStataionId = $stateParams.stationId;
 	$scope.selectedSensorName = $stateParams.sensorName;
@@ -37,7 +50,6 @@ sensorCloudApp.controller('sensorManagerController', function($scope, $statePara
 		});
 		
 	});
-	
 	
 		
 	sensorService.getSensorTypes(function(data){
@@ -174,16 +186,53 @@ sensorCloudApp.controller('sensorControlController', function($scope, $http, sta
 //    }
 //});
 
+
+
+
 sensorCloudApp.controller('sensorDataController', function($scope, $http, $stateParams, sensorDataService){
 	sensorDataService.getSensorData($stateParams.stationId, function(data){
-		$scope.dataSet = data;
+	//	$scope.dataSet = data;
+	//alert("in sensor data" + data);
+		/*var a = [];
+		for(var i =0 ; i < data.arr.length ; i++){
+			if ( data.arr[i].sensorName == data.)
+			data.ListOfSensor.length
+			a.push(data[i].dataObject.date )
+			data[i].dataObject.sensorName 
+		}*/
+	$scope.sensorList = data.ListOfSensor;	
+	
+	$scope.getgraph= function(){
+			
+			alert("inside getgraph");
+			var s = []; 
+			var d = [];
+		//	var t =[6,3,11,5,9,8],f=[2011,2012,2013,2014,2015,2016];
+			alert(data.ListOfSensor.length);
+		for(var j =0 ; j < data.ListOfSensor.length ; j++){
+			var name = data.ListOfSensor[j];
+			for(var i =0 ; i < data.arr.length ; i++){
+				if (data.arr[i].sensorName == name && data.arr[i].data != 'MM' && data.arr[i].data != undefined){	
+					d.push(data.arr[i].date);
+				    s.push(data.arr[i].data/1); 
+				}
+			}
+			alert(s + d);
+			$scope.ShowDriverDetails(s,d,name);
+		}
+    	
+    	//$scope.ShowDriverDetails(s,d,t,f); 
+    	
+};
+$scope.getgraph(); 
+	 
 	});
-	$scope.sensorList = ['1','2','3'];
+	
 	 
 	   ////
-	 $scope.ShowDriverDetails = function(s,d,t,f) {
+	 $scope.ShowDriverDetails = function(s,d,name) {
 		   alert("inside driver");
-    	   $scope.chartConfig1 = {
+    	   $scope[name+'1'] = {
     		        options: {
     		            chart: {
     		                type: 'line',
@@ -205,7 +254,7 @@ sensorCloudApp.controller('sensorDataController', function($scope, $http, $state
     		        loading: false
     		    }
     	   
-    	  $scope.chartConfig2 = {
+    	  $scope[name+'2'] = {
     		        options: {
     		            chart: {
     		                type: 'bar',
@@ -214,7 +263,7 @@ sensorCloudApp.controller('sensorDataController', function($scope, $http, $state
     		        },
     		         series: [{
     		         
-    		        	 data : t,
+    		        	 data : s,
     		          //  pointInterval: 24 * 3600 * 1000 // one day
     		        }],
     		        title: {
@@ -222,12 +271,12 @@ sensorCloudApp.controller('sensorDataController', function($scope, $http, $state
     		        },
     		        xAxis: {
     		        
-    		          categories: f
+    		          categories: d
     		        },
     		        loading: false
     		    }
     	   
-      	  $scope.chartConfig3 = {
+      	  $scope[name+'3'] = {
     		        options: {
     		            chart: {
     		                type: 'pie',
@@ -236,7 +285,7 @@ sensorCloudApp.controller('sensorDataController', function($scope, $http, $state
     		        },
     		         series: [{
     		         
-    		        	 data : t,
+    		        	 data : s,
     		          //  pointInterval: 24 * 3600 * 1000 // one day
     		        }],
     		        title: {
@@ -244,12 +293,12 @@ sensorCloudApp.controller('sensorDataController', function($scope, $http, $state
     		        },
     		        xAxis: {
     		        
-    		          categories: f
+    		          categories: d
     		        },
     		        loading: false
     		    }
     	   
-    	 $scope.chartConfig4 = {
+    	 $scope[name+'4'] = {
     		        options: {
     		            chart: {
     		                type: 'column',
@@ -258,7 +307,7 @@ sensorCloudApp.controller('sensorDataController', function($scope, $http, $state
     		        },
     		         series: [{
     		         
-    		        	 data : t,
+    		        	 data : s,
     		          //  pointInterval: 24 * 3600 * 1000 // one day
     		        }],
     		        title: {
@@ -266,21 +315,22 @@ sensorCloudApp.controller('sensorDataController', function($scope, $http, $state
     		        },
     		        xAxis: {
     		        
-    		          categories: f
+    		          categories: d
     		        },
     		        loading: false
     		    }
  			}
  
-	  $scope.getgraph= function(){
+	/*  $scope.getgraph= function(){
 		  			
 		  			alert("inside getgraph");
+		  			
 		           	var s =[2,16,7,11],d=[2013,2014,2015,2016];
 		        	var t =[6,3,11,5,9,8],f=[2011,2012,2013,2014,2015,2016];
 	            	$scope.ShowDriverDetails(s,d,t,f); 
 	            	
 	        };
-	    $scope.getgraph(); 
+	    $scope.getgraph(); */
 	////
 	
 	

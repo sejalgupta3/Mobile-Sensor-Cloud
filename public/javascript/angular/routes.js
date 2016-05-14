@@ -67,7 +67,7 @@ sensorCloudApp.config(function($stateProvider, $urlRouterProvider) {
 			url: '/editStation/:stationId',
 	        parent: 'adminNavigation',
 	        templateUrl: '/partials/editStation.ejs',
-	        controller: 'sensorManagerController'
+	        controller: 'editsensorManagerController'
 	    })
 	    .state('deleteStation', {
 			url: '/deleteStation/:stationId',

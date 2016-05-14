@@ -42,6 +42,7 @@ app.post('/addStation', sensorManager.addStation);
 app.post('/editStation', sensorManager.editStation);
 app.post('/deleteStation', sensorManager.deleteStation);
 app.get('/getStationList', sensorManager.getStationList);
+app.post('/getStationDetails', sensorManager.getStationDetails);
 app.get('/getSensorList', sensorManager.getSensorList);
 app.post('/addSensor', sensorManager.addSensor);
 app.post('/editSensor', sensorManager.editSensor);
