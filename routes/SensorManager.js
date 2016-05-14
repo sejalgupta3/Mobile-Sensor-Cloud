@@ -42,6 +42,25 @@ exports.getStationList = function(req, res) {
 }
 
 
+exports.getStationDetails = function(req, res) {
+	console.log("getStationDetails : " + req.body.id );
+	mongo.connect(mongoURL, function(){
+		console.log('Connected to mongo at: ' + mongoURL);
+		var coll = mongo.collection('station');
+		coll.find({stationId : req.body.id  }).toArray(function(err, result){
+			if (result) {
+				console.log(result);
+				 res.send(result);
+
+			} else {
+				console.log("Problem Editing station");
+				res.send("Problem Editing station ");
+			}
+		});
+	});
+}
+
+
 exports.addStation = function (req, res) {
 	var name , id  , lat, long ,status  ;
 	name = req.body.name;
@@ -273,27 +292,12 @@ exports.changeSensorStatus = function(req, res){
 }
 
 exports.getSensorLatestData = function(req, res){
-	
-
-	  /* http.get('www.ndbc.noaa.gov/data/realtime2/TIBC1.txt', function(res){
-	        var str = '';
-	        console.log('Response is '+res.statusCode);
-	        
-	        res.on('data', function (chunk) {
-	              //console.log('BODY: ' + chunk);
-	               str += chunk;
-	         });
-
-	        res.on('end', function () {
-	             console.log(str);
-	        });
-
-	  });*/
+	var arr =[];	
 	console.log("in getSensorLatestData " + req.body.id);
 	var stationId = req.body.id;
 	return http.get({
         host: 'www.ndbc.noaa.gov',
-        path: '/data/realtime2/MBXC1.txt'
+        path: '/data/realtime2/' + stationId + '.txt'
     }, function(response) {
         // Continuously update stream with data
         var body = '';
@@ -302,7 +306,7 @@ exports.getSensorLatestData = function(req, res){
         });
         var prevDate = '';
         response.on('end', function() {
-        	var arr =[];	
+        	
         			
         			/////////
         			mongo.connect(mongoURL, function(){
@@ -310,51 +314,96 @@ exports.getSensorLatestData = function(req, res){
         				var coll = mongo.collection('sensor');
         				coll.find({stationId : stationId }).toArray(function(err, result){
         					if (result) {
-        						console.log("Result:" +  result);
+        						console.log("Result: " + result.length +  result);
         						console.log(result);
         						var data = body.split("\n");
         			        	var stationData = [];
+        			        	var ListOfSensor = [];
+        			        	for ( var k =0 ; k < result.length ; k++){
+        			        		ListOfSensor.push(result[k].sensorName);
+        			        	}
         			        	/*var dataObject = {
 			                    		date : '',
 			                    		data : '',
 			                    		sensorName : ''
         			        	}*/
         			        	for(var i=2; i<data.length; i++){
+        			        		
         			        		var dataRow = data[i].replace( /\s\s+/g, ' ' ).split(" ");
+        			        		
         			        		if(dataRow[2] != prevDate){
+        			        			
         			        			prevDate = dataRow[2];
-        			        			var dataObject = {
+        			        			/*var dataObject = {
         			                    		date : '',
         			                    		data : '',
         			                    		sensorName : ''
-        			                    	}
-        			        			 dataObject.date = dataRow[1] + '/' + dataRow[2] +  '/' + dataRow[0];
+        			                    	}*/
+        			        			
         			        			 for (var j =0 ; j < result.length ;j++){
+        			        				 var dataObject = {
+             			                    		date : '',
+             			                    		data : '',
+             			                    		sensorName : ''
+             			                    	}
+        			        				 dataObject.date = dataRow[1] + '/' + dataRow[2] +  '/' + dataRow[0];
         			        				 dataObject.data =  dataRow[sensorColumn[result[j].sensorName]];
         			        				 dataObject.sensorName = result[j].sensorName;
         			        				 console.log (dataObject.date + " " + dataObject.data +" " + dataObject.sensorName   );
-        			        				 arr.push(dataObject);
+        			        				arr.push(dataObject);
+        			        				//console.log(arr);
         			        			 }
         			        			
-        			            			/*for(index in stations){
-        			            				var station = stations[index];
-        			            				if(station.id == stationId){
-        			            					for(j in station.sensorList){
-        			            						var sensor = station.sensorList[j];
-        			            						dataObject.dataArray.push({sensorId : sensor.name , data:  dataRow[sensorColumn[sensor.name]]});
-        			            					}
-        			            				}
-        			            			}*/
         			            		}
+        			        	
         			            	}
-
-        					} else {
+        			        	
+        					}
+        					
+        					else {
         						console.log("Problem Displaying station");
         					}
+        					console.log(arr);
+        					res.send({arr:arr , length : result.length , ListOfSensor : ListOfSensor});
         				});
+        				
         			});
-        			//
-            res.send(arr);
         });
     });
-}
+};
+
+
+exports.getTotalUser = function(req, res){
+	mongo.connect(mongoURL, function(){
+		console.log('Connected to mongo at: ' + mongoURL);
+		var coll = mongo.collection('users');
+		coll.find({}).toArray(function(err, result){
+			if (result) {
+				console.log(result);
+				 res.send(result.length);
+
+			} else {
+				console.log("Problem Displaying station");
+				res.send("Problem Displaying station ");
+			}
+		});
+	});
+};
+
+
+exports.getTotalStations = function(req, res){
+	mongo.connect(mongoURL, function(){
+		console.log('Connected to mongo at: ' + mongoURL);
+		var coll = mongo.collection('station');
+		coll.find({}).toArray(function(err, result){
+			if (result) {
+				console.log(result);
+				 res.send(result.length);
+
+			} else {
+				console.log("Problem counting station");
+				res.send("Problem counting station ");
+			}
+		});
+	});
+};

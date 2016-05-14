@@ -77,6 +77,18 @@ sensorCloudApp.service('sensorDataService', function($http, $state){
 
 sensorCloudApp.service('stationService', function($http, $state){
 	
+	
+	this.getStationDetails = function(id,callback){
+		alert("inside service");
+		$http.post('/getStationDetails', JSON.stringify({id : id}))
+		.success(function(res){
+			callback(res);
+
+		}
+	);
+		
+	}
+	
 	this.addStation = function(name, id, lat, long){
 		var stationData = {
 				name: name,
