@@ -23,12 +23,12 @@
            	</thead>
         	<tbody>
             	<tr ng-repeat = "station in stations">
-                	<td>{{station.name}}</td>
+                	<td>{{station.stationName}}</td>
                    	<td><!-- Switch -->
         				<div class="switch">
            			 		<label>
             				 	Off
-             			 		<input type="checkbox" ng-model="station.status" ng-true-value="'active'" ng-false-value="'inactive'" ng-change="changeStationStatus(station.id, station.name)">
+             			 		<input type="checkbox" ng-model="station.stationStatus" ng-true-value="'active'" ng-false-value="'inactive'" ng-change="changeStationStatus(station.stationId, station.stationName)">
              			 		<span class="lever"></span>
              					On
            			 		</label>
@@ -40,7 +40,7 @@
 	</div>
 	<div class="col s8" style="padding:2%">
       	<div ng-if="flag">
-			<div my-map="" stations="stations"></div>
+			<div my-map="" stations="stations" sensors="sensorList" user="admin"></div>
 		</div>
   	</div>
 </div>

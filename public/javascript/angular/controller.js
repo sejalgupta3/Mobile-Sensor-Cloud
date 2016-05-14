@@ -38,8 +38,6 @@ sensorCloudApp.controller('sensorManagerController', function($scope, $statePara
 		
 	});
 	
-	
-		
 	sensorService.getSensorTypes(function(data){
 		$scope.selectValues = data;
 	});
@@ -118,10 +116,13 @@ sensorCloudApp.controller('sensorManagerController', function($scope, $statePara
 
 sensorCloudApp.controller('sensorControlController', function($scope, $http, stationService, sensorService){
 	$scope.flag = false;
-	
+
 	stationService.getStationList(function(list){
 		$scope.stations = list;
 		$scope.flag = true;
+		sensorService.getSensorList(function(sensor){
+			$scope.sensorList = sensor;
+		});
 	});
 	
 	sensorService.getSensorTypes(function(data){
@@ -178,6 +179,7 @@ sensorCloudApp.controller('sensorDataController', function($scope, $http, $state
 	sensorDataService.getSensorData($stateParams.stationId, function(data){
 		$scope.dataSet = data;
 	});
+	
 	$scope.sensorList = ['1','2','3'];
 	 
 	   ////
