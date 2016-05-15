@@ -29,6 +29,13 @@ sensorCloudApp.service('userService', function($http, $state){
 	this.getRegisterResponse = function(){
 		return responseMessage;
 	};
+	
+	this.getCurrentUser = function(callback){
+		$http.get('/getCurrentUser')
+		.success(function(res){
+			callback(res);
+		});
+	}
 });
 
 sensorCloudApp.service('verifyUserService', function($http, $state){

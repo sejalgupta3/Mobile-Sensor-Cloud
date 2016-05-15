@@ -12,6 +12,11 @@ exports.partials = function (req, res) {
 	res.render('partials/' + name);
 };
 
+exports.getCurrentUser = function(req, res){
+	console.log(req.session.userid);
+	res.send(req.session.userid);
+}
+
 exports.register = function (req, res) {
 	var email , pwd  , firstname, lastname  ;
 	firstname = req.body.firstName;

@@ -2,6 +2,12 @@ sensorCloudApp.controller('mainController', function($scope) {
 	$scope.Message = "In controller";
 });
 
+sensorCloudApp.controller('userNavigationController', function($scope, $http, $state, userService) {
+	userService.getCurrentUser(function(res){
+		$scope.useremail = res;
+	});
+});
+
 sensorCloudApp.controller('userRegisterController', function($scope, $http, $state, userService) {
 	$scope.confirmRegister = function(){
 		if($scope.password == $scope.cpassword){

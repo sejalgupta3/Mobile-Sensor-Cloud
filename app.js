@@ -36,6 +36,7 @@ app.get('/partials/:name', routes.partials);
 app.get('/getSensorTypes', sensorManager.getSensorTypes);
 app.post('/register', routes.register);
 app.post('/login', routes.validateUser);
+app.get('/getCurrentUser', routes.getCurrentUser);
 app.post('/getSensorLatestData', sensorManager.getSensorLatestData);
 app.post('/changeStationStatus', sensorManager.changeStationStatus);
 app.post('/changeSensorStatus', sensorManager.changeSensorStatus);
