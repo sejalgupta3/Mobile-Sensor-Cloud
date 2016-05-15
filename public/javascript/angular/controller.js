@@ -33,15 +33,18 @@ sensorCloudApp.controller('userDashboardController', function($scope, $http, sen
 
 
 sensorCloudApp.controller('editsensorManagerController', function($scope,$stateParams, $http,stationService){
-	$scope.name = "Neha";
 	var selectedStationId = $stateParams.stationId;
-	alert(selectedStationId);
+	
 	stationService.getStationDetails(selectedStationId,function(list){
-		$scope.stationList = list;
-		alert(list);
+		$scope.stationName = list[0].stationName;
+		$scope.stationId = list[0].stationId;
+		$scope.lat = list[0].stationLat;
+		$scope.lng = list[0].stationLong;
 	});
 	
-	
+	$scope.confirmEditStation = function(){
+		stationService.editStation($scope.stationName, $scope.stationId, $scope.lat, $scope.lng);
+	}
 });
 
 sensorCloudApp.controller('sensorManagerController', function($scope, $stateParams ,$http, sensorService, stationService){
@@ -96,11 +99,7 @@ sensorCloudApp.controller('sensorManagerController', function($scope, $statePara
 	$scope.confirmAddStation = function(){
 		stationService.addStation($scope.stationName, $scope.stationId, $scope.lat, $scope.lng);
 	}
-
-	$scope.confirmEditStation = function(){
-		stationService.editStation($scope.stationName, $scope.stationId, $scope.lat, $scope.lng);
-	}
-
+	
 	$scope.confirmDeleteStation = function(selectedStationId){
 		if(confirm("Are you sure you want to delete the station " + selectedStationId)){
 			stationService.deleteStation(selectedStationId, function(res){
