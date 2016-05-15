@@ -32,6 +32,11 @@ body{
 	color: #1a237e;
 }
 
+.cloudIntroDiv h4{
+	text-transform: uppercase;	
+	color: #1a237e;
+}
+
 nav{
 	background-color: #1e88e5;
 }
@@ -73,4 +78,10 @@ main{
 label{
 	color: black;
 	font-size: 1.3em;
+}
+
+.sensorTypeDiv p{
+	padding: 5%;
+	margin: 8%;
+	font-weight: 700;
 }

@@ -121,8 +121,6 @@ sensorCloudApp.controller('sensorManagerController', function($scope, $statePara
 					$scope.sensorList = sensor;
 					alert(res);
 				});
-			//	$scope.stationList = list;
-				
 			});
 		}
 	}
@@ -162,32 +160,6 @@ sensorCloudApp.controller('sensorControlController', function($scope, $http, sta
     	}
     }
 });
-
-//sensorCloudApp.controller('userSensorDataController', function($scope, $http, stationService, sensorService){
-//	$scope.flag = false;
-//	
-//	stationService.getStationList(function(list){
-//		$scope.stations = list;
-//		$scope.flag = true;
-//	});
-//
-//	sensorService.getSensorTypes(function(data){
-//		$scope.selectValues = data;
-//	});
-//	
-//    $scope.choseSensorType = function() {
-//        var userValues = {
-//          selectedType : $scope.selectedSensorType
-//        };
-//        $http.post('/retreiveSelectedSensorTypeStations', userValues)
-//	       .success(function(res) {
-//	           $scope.stations = res;
-//	       })
-//	       .error(function(res) {
-//	           console.log('Error: ' + res);
-//	       });
-//    }
-//});
 
 sensorCloudApp.controller('sensorDataController', function($scope, $http, $stateParams, sensorDataService, sensorService){
 	sensorDataService.getSensorData($stateParams.stationId, function(data){
