@@ -8,6 +8,7 @@
 <div class="row">
 	<div>
     	<select class="browser-default" ng-model="selectedSensorType" ng-change = "choseSensorType()" material-select>
+    		<option value="" selected>All</option>
        		<option ng-repeat="value in selectValues">{{value}}</option>
    		</select>
 	</div>

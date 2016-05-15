@@ -143,7 +143,7 @@ sensorCloudApp.controller('sensorControlController', function($scope, $http, sta
 		$scope.selectValues = data;
 	});
 	
-    $scope.choseSensorType = function() {
+	$scope.choseSensorType = function() {
         var userValues = {
         	selectedType : $scope.selectedSensorType
         };
@@ -189,152 +189,130 @@ sensorCloudApp.controller('sensorControlController', function($scope, $http, sta
 //    }
 //});
 
-
-
-
-sensorCloudApp.controller('sensorDataController', function($scope, $http, $stateParams, sensorDataService){
+sensorCloudApp.controller('sensorDataController', function($scope, $http, $stateParams, sensorDataService, sensorService){
 	sensorDataService.getSensorData($stateParams.stationId, function(data){
-	//	$scope.dataSet = data;
-	//alert("in sensor data" + data);
-		/*var a = [];
-		for(var i =0 ; i < data.arr.length ; i++){
-			if ( data.arr[i].sensorName == data.)
-			data.ListOfSensor.length
-			a.push(data[i].dataObject.date )
-			data[i].dataObject.sensorName 
-		}*/
-	$scope.sensorList = data.ListOfSensor;	
-	
-	$scope.getgraph= function(){
-			
-			alert("inside getgraph");
-			var s = []; 
-			var d = [];
-		//	var t =[6,3,11,5,9,8],f=[2011,2012,2013,2014,2015,2016];
-			alert(data.ListOfSensor.length);
-		for(var j =0 ; j < data.ListOfSensor.length ; j++){
-			var name = data.ListOfSensor[j];
-			for(var i =0 ; i < data.arr.length ; i++){
-				if (data.arr[i].sensorName == name && data.arr[i].data != 'MM' && data.arr[i].data != undefined){	
-					d.push(data.arr[i].date);
-				    s.push(data.arr[i].data/1); 
+		$scope.sensorList = data.ListOfSensor;
+		$scope.configList = []; 
+		$scope.getgraph= function(){
+			for(var j =0 ; j < $scope.sensorList.length ; j++){
+				var s = []; 
+				var d = [];
+				var sensor = data.ListOfSensor[j];
+				for(var i =0 ; i < data.arr.length ; i++){
+					if (data.arr[i].sensorName == sensor.sensorName && data.arr[i].data != 'MM' && data.arr[i].data != undefined){	
+						d.push(data.arr[i].date);
+					    s.push(data.arr[i].data/1); 
+					}
 				}
+				$scope.ShowDriverDetails(s,d,sensor);
 			}
-			alert(s + d);
-			$scope.ShowDriverDetails(s,d,name);
-		}
-    	
-    	//$scope.ShowDriverDetails(s,d,t,f); 
-    	
-};
-$scope.getgraph(); 
-	 
+		};
+		$scope.getgraph(); 
 	});
 	
-	 
-	   ////
-	 $scope.ShowDriverDetails = function(s,d,name) {
-		   alert("inside driver");
-    	   $scope[name+'1'] = {
-    		        options: {
-    		            chart: {
-    		                type: 'line',
-    		                
-    		            }
-    		        },
-    		         series: [{
-    		         
-    		        	 data : s,
-    		          //  pointInterval: 24 * 3600 * 1000 // one day
-    		        }],
-    		        title: {
-    		            text: 'Temperature Data'
-    		        },
-    		        xAxis: {
-    		        
-    		          categories: d
-    		        },
-    		        loading: false
-    		    }
-    	   
-    	  $scope[name+'2'] = {
-    		        options: {
-    		            chart: {
-    		                type: 'bar',
-    		                
-    		            }
-    		        },
-    		         series: [{
-    		         
-    		        	 data : s,
-    		          //  pointInterval: 24 * 3600 * 1000 // one day
-    		        }],
-    		        title: {
-    		            text: 'Humidity Data'
-    		        },
-    		        xAxis: {
-    		        
-    		          categories: d
-    		        },
-    		        loading: false
-    		    }
-    	   
-      	  $scope[name+'3'] = {
-    		        options: {
-    		            chart: {
-    		                type: 'pie',
-    		                
-    		            }
-    		        },
-    		         series: [{
-    		         
-    		        	 data : s,
-    		          //  pointInterval: 24 * 3600 * 1000 // one day
-    		        }],
-    		        title: {
-    		            text: 'Precipitation Data'
-    		        },
-    		        xAxis: {
-    		        
-    		          categories: d
-    		        },
-    		        loading: false
-    		    }
-    	   
-    	 $scope[name+'4'] = {
-    		        options: {
-    		            chart: {
-    		                type: 'column',
-    		                
-    		            }
-    		        },
-    		         series: [{
-    		         
-    		        	 data : s,
-    		          //  pointInterval: 24 * 3600 * 1000 // one day
-    		        }],
-    		        title: {
-    		            text: 'Wind Cycle Data'
-    		        },
-    		        xAxis: {
-    		        
-    		          categories: d
-    		        },
-    		        loading: false
-    		    }
- 			}
- 
-	/*  $scope.getgraph= function(){
-		  			
-		  			alert("inside getgraph");
-		  			
-		           	var s =[2,16,7,11],d=[2013,2014,2015,2016];
-		        	var t =[6,3,11,5,9,8],f=[2011,2012,2013,2014,2015,2016];
-	            	$scope.ShowDriverDetails(s,d,t,f); 
-	            	
-	        };
-	    $scope.getgraph(); */
-	////
+	$scope.changeSensorStatus = function(stationId, sensorName){
+    	if(confirm("Are you sure you want to change the status of the sensorName: " + sensorName )){
+    		sensorService.changeSensorStatus(stationId, sensorName, function(status){
+    			alert(status);
+    			if(status == "Success"){
+    				if($scope[sensorName + 'showStatus']){
+    					$scope[sensorName + 'showStatus'] = false;
+    				}else{
+    					$scope[sensorName + 'showStatus'] = true;
+    				}
+        		}
+    		});
+    	}
+    }
+    
+    $scope.showSensorType = function(){
+		var sensor = $scope.selectedSensorType;
+		if(sensor != ""){
+			$scope[sensor + 'showSensor'] = false;
+			for(index in $scope.sensorList){
+				var name = $scope.sensorList[index].sensorName;
+				if(sensor != name){
+					$scope[name + 'showSensor'] = true;
+				}
+			}
+		}else{
+			for(index in $scope.sensorList){
+				$scope[$scope.sensorList[index].sensorName + 'showSensor'] = false;
+			}
+		}
+    }
 	
-	
+	$scope.ShowDriverDetails = function(s,d,sensor) {
+		var chart1 = {
+			options: {
+				chart: {
+					type: 'line',   		             
+    		     }
+    		},
+    		series: [{         
+    			data : s,
+    		}],
+	        xAxis: {
+	        	categories: d
+	        },
+	        loading: false
+	    }
+		
+		var chart2 = {
+			options: {
+				chart: {
+					type: 'bar',   		             
+    		     }
+    		},
+    		series: [{         
+    			data : s,
+    		}],
+	        xAxis: {
+	        	categories: d
+	        },
+	        loading: false
+	    }
+		
+		var chart3 = {
+			options: {
+				chart: {
+					type: 'pie',   		             
+    		     }
+    		},
+    		series: [{         
+    			data : s,
+    		}],
+	        xAxis: {
+	        	categories: d
+	        },
+	        loading: false
+	    }
+		
+		var chart4 = {
+			options: {
+				chart: {
+					type: 'column',   		             
+    		     }
+    		},
+    		series: [{         
+    			data : s,
+    		}],
+	        xAxis: {
+	        	categories: d
+	        },
+	        loading: false
+	    }	
+		
+		var configData = {
+			sensor: {},
+			config : []
+		};
+		 
+		configData.sensor = sensor;
+		configData.config.push(chart1);
+		configData.config.push(chart2);
+		configData.config.push(chart3);
+		configData.config.push(chart4);
+		$scope.configList.push(configData);
+	}
 });

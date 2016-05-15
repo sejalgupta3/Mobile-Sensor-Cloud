@@ -252,7 +252,6 @@ exports.getSensorList = function(req, res) {
 };
 
 exports.showSelectedSensorTypeStations = function(req,res) {
-
     var requestedsensortype = req.param("selectedType")
     var requestedStations = [];
 
@@ -276,98 +275,74 @@ exports.showSelectedSensorTypeStations = function(req,res) {
     res.send(requestedStations);
 }
 
-exports.changeSensorStatus = function(req, res){
+exports.changeStationStatus = function(req, res){
 	var stationId = req.body.id;
-	for(index in stations){
-		var station = stations[index];
-		if(stationId == station.id){
-			if(station.status == 'active'){
-				station.status = 'inactive';
-			}else{
-				station.status = 'active';
-			}
-			res.send("Success");
-		}
-	}
+//	for(index in stations){
+//		var station = stations[index];
+//		if(stationId == station.id){
+//			if(station.status == 'active'){
+//				station.status = 'inactive';
+//			}else{
+//				station.status = 'active';
+//			}
+//			res.send("Success");
+//		}
+//	}
+	res.send("Success");
+}
+
+exports.changeSensorStatus = function(req, res){
+	//var stationId = req.body.id;
+	//var sensorName = req.body.sensorName;
+	res.send("Success");
 }
 
 exports.getSensorLatestData = function(req, res){
 	var arr =[];	
-	console.log("in getSensorLatestData " + req.body.id);
 	var stationId = req.body.id;
 	return http.get({
         host: 'www.ndbc.noaa.gov',
         path: '/data/realtime2/' + stationId + '.txt'
     }, function(response) {
-        // Continuously update stream with data
         var body = '';
         response.on('data', function(d) {
             body += d;
         });
         var prevDate = '';
         response.on('end', function() {
-        	
-        			
-        			/////////
-        			mongo.connect(mongoURL, function(){
-        				console.log('Connected to mongo at: ' + mongoURL);
-        				var coll = mongo.collection('sensor');
-        				coll.find({stationId : stationId }).toArray(function(err, result){
-        					if (result) {
-        						console.log("Result: " + result.length +  result);
-        						console.log(result);
-        						var data = body.split("\n");
-        			        	var stationData = [];
-        			        	var ListOfSensor = [];
-        			        	for ( var k =0 ; k < result.length ; k++){
-        			        		ListOfSensor.push(result[k].sensorName);
-        			        	}
-        			        	/*var dataObject = {
-			                    		date : '',
-			                    		data : '',
-			                    		sensorName : ''
-        			        	}*/
-        			        	for(var i=2; i<data.length; i++){
-        			        		
-        			        		var dataRow = data[i].replace( /\s\s+/g, ' ' ).split(" ");
-        			        		
-        			        		if(dataRow[2] != prevDate){
-        			        			
-        			        			prevDate = dataRow[2];
-        			        			/*var dataObject = {
-        			                    		date : '',
-        			                    		data : '',
-        			                    		sensorName : ''
-        			                    	}*/
-        			        			
-        			        			 for (var j =0 ; j < result.length ;j++){
-        			        				 var dataObject = {
-             			                    		date : '',
-             			                    		data : '',
-             			                    		sensorName : ''
-             			                    	}
-        			        				 dataObject.date = dataRow[1] + '/' + dataRow[2] +  '/' + dataRow[0];
-        			        				 dataObject.data =  dataRow[sensorColumn[result[j].sensorName]];
-        			        				 dataObject.sensorName = result[j].sensorName;
-        			        				 console.log (dataObject.date + " " + dataObject.data +" " + dataObject.sensorName   );
-        			        				arr.push(dataObject);
-        			        				//console.log(arr);
-        			        			 }
-        			        			
-        			            		}
-        			        	
-        			            	}
-        			        	
-        					}
-        					
-        					else {
-        						console.log("Problem Displaying station");
-        					}
-        					console.log(arr);
-        					res.send({arr:arr , length : result.length , ListOfSensor : ListOfSensor});
-        				});
-        				
-        			});
+			mongo.connect(mongoURL, function(){
+				var coll = mongo.collection('sensor');
+				coll.find({stationId : stationId }).toArray(function(err, result){
+					if (result) {
+						var data = body.split("\n");
+			        	var stationData = [];
+			        	var ListOfSensor = [];
+			        	for ( var k =0 ; k < result.length ; k++){
+			        		ListOfSensor.push(result[k]);
+			        	}
+			        	for(var i=2; i<data.length; i++){	
+			        		var dataRow = data[i].replace( /\s\s+/g, ' ' ).split(" ");
+			        		if(dataRow[2] != prevDate){
+			        			prevDate = dataRow[2];
+			        			for (var j =0 ; j < result.length ;j++){
+			        				var dataObject = {
+			        					date : '',
+	 			                    	data : '',
+	 			                    	sensorName : ''
+	 			                    }
+			        				dataObject.date = dataRow[1] + '/' + dataRow[2] +  '/' + dataRow[0];
+			        				dataObject.data =  dataRow[sensorColumn[result[j].sensorName]];
+			        				dataObject.sensorName = result[j].sensorName;
+			        				arr.push(dataObject);
+			        			}
+			            	}
+			            }	
+					}else {
+						console.log("Problem Displaying station");
+					}
+					res.send({arr:arr , length : result.length , ListOfSensor : ListOfSensor});
+				});
+			});
         });
     });
 };

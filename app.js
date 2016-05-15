@@ -37,7 +37,8 @@ app.get('/getSensorTypes', sensorManager.getSensorTypes);
 app.post('/register', routes.register);
 app.post('/login', routes.validateUser);
 app.post('/getSensorLatestData', sensorManager.getSensorLatestData);
-app.post('/changeStationStatus', sensorManager.changeSensorStatus)
+app.post('/changeStationStatus', sensorManager.changeStationStatus);
+app.post('/changeSensorStatus', sensorManager.changeSensorStatus);
 app.post('/addStation', sensorManager.addStation);
 app.post('/editStation', sensorManager.editStation);
 app.post('/deleteStation', sensorManager.deleteStation);
@@ -47,7 +48,7 @@ app.get('/getSensorList', sensorManager.getSensorList);
 app.post('/addSensor', sensorManager.addSensor);
 app.post('/editSensor', sensorManager.editSensor);
 app.post('/deleteSensor', sensorManager.deleteSensor);
-app.post('/retreiveSelectedSensorTypeStations', sensorManager.showSelectedSensorTypeStations)
+app.post('/retreiveSelectedSensorTypeStations', sensorManager.showSelectedSensorTypeStations);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

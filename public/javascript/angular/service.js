@@ -79,14 +79,18 @@ sensorCloudApp.service('stationService', function($http, $state){
 	
 	
 	this.getStationDetails = function(id,callback){
-		alert("inside service");
 		$http.post('/getStationDetails', JSON.stringify({id : id}))
 		.success(function(res){
 			callback(res);
 
-		}
-	);
-		
+		});	
+	}
+	
+	this.addStationHistory = function(id){
+		$http.post('/addStationHistory', JSON.stringify({id : id}))
+		.success(function(res){
+			console.log(res);
+		});
 	}
 	
 	this.addStation = function(name, id, lat, long){
@@ -211,6 +215,14 @@ sensorCloudApp.service('sensorService', function($http, $state){
 		$http.get('/getSensorTypes')
 			.success(function(res){
 				callback(res);
+			}
+		);
+	}
+	
+	this.changeSensorStatus = function(stationId, sensorName, callback){
+		$http.post('/changeSensorStatus', JSON.stringify({id: stationId, sensorName: sensorName}))
+		.success(function(res){
+			callback(res);
 			}
 		);
 	}

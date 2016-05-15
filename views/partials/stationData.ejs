@@ -1,34 +1,25 @@
+<div class="row">
+	<div>
+       	<select class="browser-default" ng-model="selectedSensorType" ng-change="showSensorType()">
+       		<option value="" selected>All</option>
+       		<option value="{{data.sensor.sensorName}}" ng-repeat="data in configList">{{data.sensor.sensorType}}</option>
+       	</select>
+   	</div>
+</div>
 
-	
-			<div class="row"  ng-repeat = "data in sensorList">
-				<div class="col m3 ">
-					 <highchart id="chart1" config="{{data}}1" class="span10" ng-hide= "temp"></highchart>
-				</div>	 
-				 
-				<div class="col m3">
-					  <highchart id="chart1" config={{data}} class="span10" ng-hide="humidity"></highchart>
-				</div>	  
-				
-				<div class="col m3">
-					   <highchart id="chart1" config={{data}} class="span10"></highchart>
-				</div>
-				<div class="col m3">
-					   <highchart id="chart1" config={{data}} class="span10"></highchart>
-				</div>
-			</div>	
-			{{dataSet}}	
-<!-- 
-<table class="striped ">
-	<thead>
-		<tr>
-			<th>Date</th>
-			<th ng-repeat="sensor in dataSet[0].dataArray">{{sensor.sensorId}}</th>		
-		</tr>
-	</thead>
-	<tbody>
-		<tr ng-repeat="data in dataSet">
-			<td>{{data.date}}</td>
-			<td ng-repeat = "sensor in data.dataArray ">{{sensor.data}}</td>
-		</tr>
-	</tbody>
-</table> -->
+<div class="row">
+	<div class="col m12" ng-repeat = "data in configList" ng-hide="{{data.sensor.sensorName}}showSensor">
+		<h1>{{data.sensor.sensorType}}</h1>
+		<div class="switch">
+	 		<label>
+				Off
+				<input type="checkbox" ng-model="data.sensor.sensorStatus" ng-true-value="'active'" ng-false-value="'inactive'" ng-change="changeSensorStatus(data.sensor.stationId, data.sensor.sensorName)">
+			 	<span class="lever"></span>
+				On
+	 		</label>
+   		</div>
+		<div ng-repeat = "conf in data.config">
+			<highchart config=conf ng-hide="{{data.sensor.sensorName}}showStatus"></highchart>
+		</div>
+	</div>
+</div>		

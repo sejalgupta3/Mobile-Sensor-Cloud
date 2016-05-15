@@ -6,11 +6,13 @@
 </style>
 <div class="row">
 	<div>
-       	<select class="browser-default" ng-model="selectedSensorType" ng-change = "choseSensorType()" material-select>
+       	<select class="browser-default" ng-model="selectedSensorType" ng-change="choseSensorType()">
+       		<option value="" selected>All</option>
        		<option ng-repeat="value in selectValues">{{value}}</option>
        	</select>
    	</div>
 </div>
+
 <div class="row">
 	<div class="col s4" style="padding:2%">
     	<table>
@@ -18,11 +20,10 @@
             	<tr>
                 	<th data-field="id">Station Name</th>
                     <th data-field="name">On/Off</th>
-
                	</tr>
            	</thead>
         	<tbody>
-            	<tr ng-repeat = "station in stations">
+            	<tr ng-repeat = "station in stations|filter:searchText">
                 	<td>{{station.stationName}}</td>
                    	<td><!-- Switch -->
         				<div class="switch">
