@@ -10,18 +10,23 @@
 	<div class="row" style="padding:2%;" ng-repeat="station in stationList| filter:searchText">
 		<table class="bordered highlight">
 			<thead>
-				<span id="stationName">{{station.stationName}} - {{station.stationStatus}}</span>
+				<span id="stationName">{{station.stationName}}: </span>
+				<span ng-if="station.stationStatus == 'active'" style="color:green">Active</span>
+				<span ng-if="station.stationStatus == 'deactive'" style="color:red">Inactive</span>
 				<span class="stationButtons">
-					<a class="waves-effect waves-light btn" href="#/addSensor/{{station.stationId}}">Add Sensor</a>
-					<a class="waves-effect waves-light btn" href="#/editStation/{{station.stationId}}">Edit Station</a>
+					<a ng-if="station.stationStatus == 'active'" class="waves-effect waves-light btn" href="#/addSensor/{{station.stationId}}">Add Sensor</a>
+					<a ng-if="station.stationStatus == 'active'" class="waves-effect waves-light btn" href="#/editStation/{{station.stationId}}">Edit Station</a>
 					<a class="waves-effect waves-light btn" ng-click="confirmDeleteStation(station.stationId)">Delete Station</a>
 				</span>
 			</thead>
 			<tbody ng-repeat="sensor in sensorList"   >
-				<tr  ng-if="sensor.stationId == station.stationId">
+				<tr  ng-if="sensor.stationId == station.stationId && station.stationStatus == 'active'">
 					<td>{{sensor.sensorName}}</td>
 					<td>{{sensor.sensorType}}</td>
-					<td>{{sensor.sensorStatus}}</td>
+					<td>
+						<span ng-if="sensor.sensorStatus == 'active'" style="color:green">Active</span>
+						<span ng-if="sensor.sensorStatus == 'deactive'" style="color:red">Inactive</span>
+					</td>
 					<td class="right-align">
 						<a class="waves-effect waves-light btn green" href="#/editSensor/{{station.sensorId}}/{{sensor.sensorName}}"><i class="material-icons">edit</i></a>
 						<a class="waves-effect waves-light btn green" ng-click="confirmDeleteSensor(station.stationId, sensor.sensorName)"><i class="material-icons">delete</i></a>

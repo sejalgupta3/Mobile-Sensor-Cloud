@@ -96,7 +96,7 @@ exports.editStation = function (req, res) {
      mongo.connect(mongoURL, function(){
  		console.log('Connected to mongo at: ' + mongoURL);
  		var coll = mongo.collection('station');
- 		coll.update({ station_id: stationId },
+ 		coll.update({ stationId: stationId },
  			   { $set:
  			      {
  				  stationName: stationName,
