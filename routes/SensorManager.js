@@ -68,7 +68,7 @@ exports.addStation = function (req, res) {
 	lat = req.body.lat;
 	long = req.body.long;
 	status =  req.body.status;
-	
+
 	mongo.connect(mongoURL, function(){
 		console.log('Connected to mongo at: ' + mongoURL);
 		var coll = mongo.collection('station');
@@ -122,7 +122,7 @@ exports.deleteStation = function (req, res) {
     mongo.connect(mongoURL, function(){
  		console.log('Connected to mongo at: ' + mongoURL);
  		var coll = mongo.collection('station');
- 		coll.remove({  stationId: stationId 
+ 		coll.remove({  stationId: stationId
  			   },function(err, user){
  			if (user) {
  				res.send("Delete successful");
@@ -140,7 +140,7 @@ exports.addSensor = function (req, res) {
     var sensorName = req.param("name");
     var sensorType = req.param("type");
     var sensorStatus = req.param("status");
-    
+
     mongo.connect(mongoURL, function(){
 		console.log('Connected to mongo at: ' + mongoURL);
 		var coll = mongo.collection('sensor');
@@ -277,9 +277,9 @@ exports.showSelectedSensorTypeStations = function(req,res) {
 
 exports.changeStationStatus = function(req, res){
 	var stationId = req.body.id;
-	
+
 	mongo.connect(mongoURL, function(){
-		var coll = mongo.collection('station');	
+		var coll = mongo.collection('station');
 		coll.findOne( { stationId : stationId}, function(err, user){
 			if (user) {
 			 var currentStatus = user.stationStatus;
@@ -289,13 +289,13 @@ exports.changeStationStatus = function(req, res){
 			 if (currentStatus === "deactive"){
 				 coll.update( { stationId : stationId}, { $set : {stationStatus : "active"}});
 			 }
-						
+
 				}
 			else {
 				console.log("error changing status");
 			}
 		});
-		
+
 	});
 	res.send("Success");
 };
@@ -304,7 +304,7 @@ exports.changeSensorStatus = function(req, res){
 	var stationId = req.body.id;
 	var sensorName = req.body.sensorName;
 	mongo.connect(mongoURL, function(){
-		var coll = mongo.collection('sensor');	
+		var coll = mongo.collection('sensor');
 		coll.findOne( { stationId : stationId , sensorName :sensorName }, function(err, user){
 			if (user) {
 			 var currentStatus = user.sensorStatus;
@@ -314,18 +314,18 @@ exports.changeSensorStatus = function(req, res){
 			 if (currentStatus === "deactive"){
 				 coll.update( { stationId : stationId , sensorName :sensorName}, { $set : {sensorStatus : "active"}});
 			 }
-						
+
 				}
 			else {
 				console.log("error changing status");
 			}
 		});
-		
+
 	});
 }
 
 exports.getSensorLatestData = function(req, res){
-	var arr =[];	
+	var arr =[];
 	var stationId = req.body.id;
 	return http.get({
         host: 'www.ndbc.noaa.gov',
@@ -347,7 +347,7 @@ exports.getSensorLatestData = function(req, res){
 			        	for ( var k =0 ; k < result.length ; k++){
 			        		ListOfSensor.push(result[k]);
 			        	}
-			        	for(var i=2; i<data.length; i++){	
+			        	for(var i=2; i<data.length; i++){
 			        		var dataRow = data[i].replace( /\s\s+/g, ' ' ).split(" ");
 			        		if(dataRow[2] != prevDate){
 			        			prevDate = dataRow[2];
@@ -363,7 +363,7 @@ exports.getSensorLatestData = function(req, res){
 			        				arr.push(dataObject);
 			        			}
 			            	}
-			            }	
+			            }
 					}else {
 						console.log("Problem Displaying station");
 					}
@@ -392,6 +392,154 @@ exports.getTotalUser = function(req, res){
 	});
 };
 
+exports.addUserHistory = function(req, res) {
+
+	var stationId = req.body.id;
+	var userId = req.session.userid;
+
+	var userCollection = mongo.collection('users');
+	var timeStamp = new Date();
+	var count = 0;
+	mongo.connect(mongoURL, function(){
+	userCollection.find({ email : userId}).toArray(function(err, userResult){
+			if (userResult) {
+				var userInfo = userResult[0];
+				var stationInfo = userInfo.stationInfo;
+
+				console.log(userInfo);
+				console.log(stationInfo);
+
+
+				var stationCollection = mongo.collection('station');
+				 mongo.connect(mongoURL, function(){
+					stationCollection.find({stationId : stationId }).toArray(function(err, result){
+						console.log("In retrieve station");
+						console.log(result);
+						console.log(stationInfo);
+
+						if (result) {
+							if (stationInfo.length == 0) {
+								var stationData  = {
+									station : result[0],
+									counter : count,
+									timeStamp : timeStamp
+								}
+								stationInfo.push(stationData);
+								userCollection.update({email : userId},{$set : {stationInfo : stationInfo}})
+							} else {
+								for (index in stationInfo) {
+								var stationObject = stationInfo[index]
+								console.log("Insiide for loop");
+								console.log(stationObject);
+								console.log(stationObject.station);
+
+
+								if (stationObject.station.stationId == stationId) {
+									// stationObject.counter = stationObject.counter + 1;
+									// stationObject.timeStamp = timeStamp;
+									var newCounter = stationObject.counter + 1;
+									var newTimeStamp = new Date();
+									var newStation = stationObject.station;
+									console.log("yehi hai kya",newStation);
+
+									var newStationInfo = {
+										station : newStation,
+										counter : newCounter,
+										timeStamp : newTimeStamp
+									}
+
+									console.log("before update",stationInfo);
+									stationInfo[index] = newStationInfo;
+									userCollection.update({email : userId},{$set : {stationInfo : stationInfo}});
+									console.log("after update",stationInfo);
+									return ;
+								}
+							}
+							var stationData  = {
+								station : result[0],
+								counter : count,
+								timeStamp : timeStamp
+							}
+							stationInfo.push(stationData);
+							userCollection.update({email : userId},{$set : {stationInfo : stationInfo}})
+							}
+						}
+						else {
+							console.log("Problem Displaying station");
+						}
+					});
+				 });
+			}
+	})
+});
+	// mongo.connect(mongoURL, function(){
+	// 	stationCollection.find({stationId : stationId }).toArray(function(err, result){
+	// 		console.log(result);
+	// 		if (result) {
+	// 			userCollection.update(
+	// 				{ email : userId},
+	// 				{ $set : { station : result,
+	// 					count : 0
+	// 				}
+	// 			})
+	// 		}
+	// 		else {
+	// 			console.log("Problem Displaying station");
+	// 		}
+	// 	});
+	// });
+}
+
+exports.fetchUserHistory = function (req, res) {
+	var userId = req.session.userid;
+	console.log(userId);
+
+	mongo.connect(mongoURL, function(){
+		var userCollection = mongo.collection('users');
+	userCollection.find({ email : userId}).toArray(function(err, userResult){
+			if (userResult) {
+				var userInfo = userResult[0];
+				console.log(userInfo);
+				var stationInfo = userInfo.stationInfo;
+				// var singleStationInfo = stationInfo[0];
+				console.log(stationInfo);
+				console.log("before sorting",stationInfo);
+				var sortedStationInfo = sortArray(stationInfo);
+				console.log("after sorting",sortedStationInfo);
+				res.send({sortedhistory : sortedStationInfo});
+				}
+			});
+		});
+}
+
+// function insertionSort(files,attrToSortBy){
+//   for(var k=1; k < files.length; k++){
+//      for(var i=k; i > 0 && new Date(files[i][attrToSortBy]) <
+//        new Date(files[i-1][attrToSortBy]); i--){
+//
+//         var tmpFile = files[i];
+//         files[i] = files[i-1];
+//         files[i-1] = tmpFile;
+//
+//      }
+//   }
+//
+// }
+
+function sortArray(stationInfo) {
+	stationInfo.sort(function(a,b) {
+		console.log(stationInfo);
+		console.log(a.timeStamp);
+		console.log(b.timeStamp);
+		console.log(a.timeStamp - b.timeStamp);
+		var d1 = new Date(a.timeStamp);
+		var d2 = new Date(b.timeStamp)
+		console.log("date 1",d1);
+		console.log("date 2",d2);
+	return(d1-d2);
+});
+}
+
 
 exports.getTotalStations = function(req, res){
 	mongo.connect(mongoURL, function(){
@@ -414,36 +562,36 @@ exports.getTotalStations = function(req, res){
 
 exports.addHistory2 = function(req, res){
 	var stationId = req.body.id;
-	
+
 	mongo.connect(mongoURL, function(){
-		var coll = mongo.collection('station');	
+		var coll = mongo.collection('station');
 		coll.findOne( { stationId : stationId }, function(err, user){
 			if (user) {
 			 var currentCounter = user.counter;
 			 currentCounter++;
 			 coll.update( { stationId : stationId}, { $set : {counter : currentCounter}});
-					
+
 				}
 			else {
 				console.log("error changing status");
 			}
 		});
-		
+
 	});
-	
+
 	mongo.connect(mongoURL, function(){
-		var coll = mongo.collection('users');	
+		var coll = mongo.collection('users');
 		coll.findOne( { stationId : stationId }, function(err, user){
 			if (user) {
 			 var currentCounter = user.counter;
 			 currentCounter++;
 			 coll.update( { stationId : stationId}, { $set : {counter : currentCounter}});
-					
+
 				}
 			else {
 				console.log("error changing status");
 			}
 		});
-		
+
 	});
 }
