@@ -10,7 +10,7 @@
 	<div class="row" style="padding:2%;" ng-repeat="station in stationList| filter:searchText">
 		<table class="bordered highlight">
 			<thead>
-				<span id="stationName">{{station.stationName}}</span>
+				<span id="stationName">{{station.stationName}} - {{station.stationStatus}}</span>
 				<span class="stationButtons">
 					<a class="waves-effect waves-light btn" href="#/addSensor/{{station.stationId}}">Add Sensor</a>
 					<a class="waves-effect waves-light btn" href="#/editStation/{{station.stationId}}">Edit Station</a>

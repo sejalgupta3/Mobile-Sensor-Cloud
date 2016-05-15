@@ -72,7 +72,7 @@ exports.addStation = function (req, res) {
 	mongo.connect(mongoURL, function(){
 		console.log('Connected to mongo at: ' + mongoURL);
 		var coll = mongo.collection('station');
-		coll.insert({stationName: name, stationId:id, stationLat:lat, stationLong : long , stationStatus : status }, function(err, result){
+		coll.insert({stationName: name, stationId:id, stationLat:lat, stationLong : long , stationStatus : status , counter : 1 }, function(err, result){
 			if (result) {
 				console.log( "Inserted Id " + result.insertedIds);
 				res.send("Station Added Successful");
@@ -277,24 +277,51 @@ exports.showSelectedSensorTypeStations = function(req,res) {
 
 exports.changeStationStatus = function(req, res){
 	var stationId = req.body.id;
-//	for(index in stations){
-//		var station = stations[index];
-//		if(stationId == station.id){
-//			if(station.status == 'active'){
-//				station.status = 'inactive';
-//			}else{
-//				station.status = 'active';
-//			}
-//			res.send("Success");
-//		}
-//	}
+	
+	mongo.connect(mongoURL, function(){
+		var coll = mongo.collection('station');	
+		coll.findOne( { stationId : stationId}, function(err, user){
+			if (user) {
+			 var currentStatus = user.stationStatus;
+			 if (currentStatus === "active"){
+				 coll.update( { stationId : stationId}, { $set : {stationStatus : "deactive"}});
+			 }
+			 if (currentStatus === "deactive"){
+				 coll.update( { stationId : stationId}, { $set : {stationStatus : "active"}});
+			 }
+						
+				}
+			else {
+				console.log("error changing status");
+			}
+		});
+		
+	});
 	res.send("Success");
-}
+};
 
 exports.changeSensorStatus = function(req, res){
-	//var stationId = req.body.id;
-	//var sensorName = req.body.sensorName;
-	res.send("Success");
+	var stationId = req.body.id;
+	var sensorName = req.body.sensorName;
+	mongo.connect(mongoURL, function(){
+		var coll = mongo.collection('sensor');	
+		coll.findOne( { stationId : stationId , sensorName :sensorName }, function(err, user){
+			if (user) {
+			 var currentStatus = user.sensorStatus;
+			 if (currentStatus === "active"){
+				 coll.update( { stationId : stationId,sensorName :sensorName}, { $set : {sensorStatus : "deactive"}});
+			 }
+			 if (currentStatus === "deactive"){
+				 coll.update( { stationId : stationId , sensorName :sensorName}, { $set : {sensorStatus : "active"}});
+			 }
+						
+				}
+			else {
+				console.log("error changing status");
+			}
+		});
+		
+	});
 }
 
 exports.getSensorLatestData = function(req, res){
@@ -382,3 +409,41 @@ exports.getTotalStations = function(req, res){
 		});
 	});
 };
+
+
+
+exports.addHistory2 = function(req, res){
+	var stationId = req.body.id;
+	
+	mongo.connect(mongoURL, function(){
+		var coll = mongo.collection('station');	
+		coll.findOne( { stationId : stationId }, function(err, user){
+			if (user) {
+			 var currentCounter = user.counter;
+			 currentCounter++;
+			 coll.update( { stationId : stationId}, { $set : {counter : currentCounter}});
+					
+				}
+			else {
+				console.log("error changing status");
+			}
+		});
+		
+	});
+	
+	mongo.connect(mongoURL, function(){
+		var coll = mongo.collection('users');	
+		coll.findOne( { stationId : stationId }, function(err, user){
+			if (user) {
+			 var currentCounter = user.counter;
+			 currentCounter++;
+			 coll.update( { stationId : stationId}, { $set : {counter : currentCounter}});
+					
+				}
+			else {
+				console.log("error changing status");
+			}
+		});
+		
+	});
+}
