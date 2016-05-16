@@ -42,7 +42,7 @@ sensorCloudApp.config(function($stateProvider, $urlRouterProvider) {
             url: '/adminDashboard',
             parent: 'adminNavigation',
             templateUrl: '/partials/adminDashboard.ejs',
-            //controller: 'adminDashboardController'
+            controller: 'adminDashboardController'
         })
 		.state('sensorManager', {
 			url: '/sensorManager',

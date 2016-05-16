@@ -50,6 +50,8 @@ app.post('/addSensor', sensorManager.addSensor);
 app.post('/editSensor', sensorManager.editSensor);
 app.post('/deleteSensor', sensorManager.deleteSensor);
 app.post('/retreiveSelectedSensorTypeStations', sensorManager.showSelectedSensorTypeStations);
+app.get('/getTotalUsers', sensorManager.getTotalUser);
+app.get('/getTotalStations', sensorManager.getTotalStations);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

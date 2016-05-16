@@ -36,6 +36,20 @@ sensorCloudApp.service('userService', function($http, $state){
 			callback(res);
 		});
 	}
+	
+	this.getTotalUsers = function(callback){
+		$http.get('/getTotalUsers')
+		.success(function(res){
+			callback(res);
+		});
+	}
+	
+	this.getTotalStations = function(callback){
+		$http.get('/getTotalStations')
+		.success(function(res){
+			callback(res);
+		});
+	}
 });
 
 sensorCloudApp.service('verifyUserService', function($http, $state){

@@ -31,6 +31,15 @@ sensorCloudApp.controller('userDashboardController', function($scope, $http, sen
 	//sensorDataService.getSensorData();
 });
 
+sensorCloudApp.controller('adminDashboardController', function($scope, $http, userService){
+	userService.getTotalUsers(function(res){
+		$scope.totalUsers = res;
+	});
+	
+	userService.getTotalStations(function(res){
+		$scope.totatStations = res;
+	});
+});
 
 sensorCloudApp.controller('editsensorManagerController', function($scope,$stateParams, $http,stationService){
 	var selectedStationId = $stateParams.stationId;

@@ -381,9 +381,7 @@ exports.getTotalUser = function(req, res){
 		var coll = mongo.collection('users');
 		coll.find({}).toArray(function(err, result){
 			if (result) {
-				console.log(result);
-				 res.send(result.length);
-
+				res.send(""+result.length);
 			} else {
 				console.log("Problem Displaying station");
 				res.send("Problem Displaying station ");
@@ -547,9 +545,7 @@ exports.getTotalStations = function(req, res){
 		var coll = mongo.collection('station');
 		coll.find({}).toArray(function(err, result){
 			if (result) {
-				console.log(result);
-				 res.send(result.length);
-
+				res.send(""+result.length);
 			} else {
 				console.log("Problem counting station");
 				res.send("Problem counting station ");
