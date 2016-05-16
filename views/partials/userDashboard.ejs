@@ -2,53 +2,31 @@
 	<div class="row">
 		<div class="col m6">
 			<h4>Recent History</h4>
-			  <ul class="collapsible" data-collapsible="accordion">
-			    <li>
-			      <div class="collapsible-header"><i class="material-icons">filter_drama</i>First</div>
-			      <div class="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div>
+			<ul class="collapsible z-depth-2" data-collapsible="accordion">
+				<li ng-repeat="data in history">
+			    	<div class="collapsible-header">{{data.station.stationName}}</div>
+			      	<div class="collapsible-body">
+						<p>Date: {{data.timeStamp}}</p>
+						<p>Latitude: {{data.station.stationLat}}</p>
+						<p>Longitude: {{data.station.stationLong}}</p>
+						<p>Status: {{data.station.stationStatus}}</p>
+					</div>
 			    </li>
-			    <li>
-			      <div class="collapsible-header"><i class="material-icons">place</i>Second</div>
-			      <div class="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div>
-			    </li>
-			    <li>
-			      <div class="collapsible-header"><i class="material-icons">whatshot</i>Third</div>
-			      <div class="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div>
-			    </li>
-			    <li>
-			      <div class="collapsible-header"><i class="material-icons">place</i>Second</div>
-			      <div class="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div>
-			    </li>
-			    <li>
-			      <div class="collapsible-header"><i class="material-icons">whatshot</i>Third</div>
-			      <div class="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div>
-			    </li>
-			  </ul>
+			</ul>
 		</div>
 		<div class="col m6">
 			<h4>Most Visited Station</h4>
-			<ul class="collapsible" data-collapsible="accordion">
-			    <li>
-			      <div class="collapsible-header"><i class="material-icons">filter_drama</i>First</div>
-			      <div class="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div>
+			<ul class="collapsible z-depth-2" data-collapsible="accordion">
+				<li ng-repeat="data in mostVisitedStation">
+			    	<div class="collapsible-header">{{data.station.stationName}}</div>
+			      	<div class="collapsible-body">
+						<p>Number Of Time Visited: {{data.counter + 1}}</p>
+						<p>Latitude: {{data.station.stationLat}}</p>
+						<p>Longitude: {{data.station.stationLong}}</p>
+						<p>Status: {{data.station.stationStatus}}</p>
+					</div>
 			    </li>
-			    <li>
-			      <div class="collapsible-header"><i class="material-icons">place</i>Second</div>
-			      <div class="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div>
-			    </li>
-			    <li>
-			      <div class="collapsible-header"><i class="material-icons">whatshot</i>Third</div>
-			      <div class="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div>
-			    </li>
-			    <li>
-			      <div class="collapsible-header"><i class="material-icons">place</i>Second</div>
-			      <div class="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div>
-			    </li>
-			    <li>
-			      <div class="collapsible-header"><i class="material-icons">whatshot</i>Third</div>
-			      <div class="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div>
-			    </li>
-			  </ul>
+			</ul>
 		</div>
 	</div>
 </div>

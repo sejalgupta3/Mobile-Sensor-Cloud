@@ -27,7 +27,7 @@ exports.register = function (req, res) {
 	mongo.connect(mongoURL, function(){
 		console.log('Connected to mongo at: ' + mongoURL);
 		var coll = mongo.collection('users');
-		coll.insert({firstname: firstname, lastname:lastname, email:email, password : pwd , station : [] }, function(err, user){
+		coll.insert({firstname: firstname, lastname:lastname, email:email, password : pwd , stationInfo : [] }, function(err, user){
 			if (user) {
 				console.log( "Inserted Id " + user.insertedIds);
 				req.session.userid=email;

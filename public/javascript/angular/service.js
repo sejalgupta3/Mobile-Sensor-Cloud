@@ -50,6 +50,20 @@ sensorCloudApp.service('userService', function($http, $state){
 			callback(res);
 		});
 	}
+	
+	this.fetchHistory = function(callback){
+		$http.get('/fetchUserHistory')
+		.success(function(res){
+			callback(res);
+		});
+	}
+	
+	this.fetchMostVisitedStations = function(callback){
+		$http.get('/fetchMostVisitedStations')
+		.success(function(res){
+			callback(res);
+		});
+	}
 });
 
 sensorCloudApp.service('verifyUserService', function($http, $state){
@@ -106,12 +120,12 @@ sensorCloudApp.service('stationService', function($http, $state){
 
 		});	
 	}
-	
-	this.addStationHistory = function(id){
-		$http.post('/addStationHistory', JSON.stringify({id : id}))
+		
+	this.addUserHistory = function(id){
+		$http.post('/addUserHistory', JSON.stringify({id : id}))
 		.success(function(res){
-			console.log(res);
-		});
+			console.log(res); 
+		}); 
 	}
 	
 	this.addStation = function(name, id, lat, long){
@@ -219,8 +233,7 @@ sensorCloudApp.service('sensorService', function($http, $state){
 		$http.get('/getSensorList')
 		.success(function(res){
 			callback(res);
-		}
-	);
+		});
 	}
 	
 	

@@ -155,23 +155,6 @@ exports.addSensor = function (req, res) {
 			}
 		});
 	});
-
-  /*  var sensorToadd = { name: sensorName, type : sensorType, status : sensorStatus}
-
-    var station;
-    console.log(stations);
-    for (stationIndex in stations){
-         station = stations[stationIndex]
-         console.log(station.Id)
-          console.log(stationId)
-
-        if(station.id == stationId){
-        	console.log(station);
-        	console.log(station.sensorList);
-            station.sensorList.push(sensorToadd);
-        }
-    }
-	res.send(station);*/
 };
 
 exports.editSensor = function (req, res) {
@@ -403,18 +386,9 @@ exports.addUserHistory = function(req, res) {
 			if (userResult) {
 				var userInfo = userResult[0];
 				var stationInfo = userInfo.stationInfo;
-
-				console.log(userInfo);
-				console.log(stationInfo);
-
-
 				var stationCollection = mongo.collection('station');
 				 mongo.connect(mongoURL, function(){
 					stationCollection.find({stationId : stationId }).toArray(function(err, result){
-						console.log("In retrieve station");
-						console.log(result);
-						console.log(stationInfo);
-
 						if (result) {
 							if (stationInfo.length == 0) {
 								var stationData  = {
@@ -427,18 +401,11 @@ exports.addUserHistory = function(req, res) {
 							} else {
 								for (index in stationInfo) {
 								var stationObject = stationInfo[index]
-								console.log("Insiide for loop");
-								console.log(stationObject);
-								console.log(stationObject.station);
-
-
+								
 								if (stationObject.station.stationId == stationId) {
-									// stationObject.counter = stationObject.counter + 1;
-									// stationObject.timeStamp = timeStamp;
 									var newCounter = stationObject.counter + 1;
 									var newTimeStamp = new Date();
 									var newStation = stationObject.station;
-									console.log("yehi hai kya",newStation);
 
 									var newStationInfo = {
 										station : newStation,
@@ -446,10 +413,8 @@ exports.addUserHistory = function(req, res) {
 										timeStamp : newTimeStamp
 									}
 
-									console.log("before update",stationInfo);
 									stationInfo[index] = newStationInfo;
 									userCollection.update({email : userId},{$set : {stationInfo : stationInfo}});
-									console.log("after update",stationInfo);
 									return ;
 								}
 							}
@@ -468,76 +433,45 @@ exports.addUserHistory = function(req, res) {
 					});
 				 });
 			}
-	})
-});
-	// mongo.connect(mongoURL, function(){
-	// 	stationCollection.find({stationId : stationId }).toArray(function(err, result){
-	// 		console.log(result);
-	// 		if (result) {
-	// 			userCollection.update(
-	// 				{ email : userId},
-	// 				{ $set : { station : result,
-	// 					count : 0
-	// 				}
-	// 			})
-	// 		}
-	// 		else {
-	// 			console.log("Problem Displaying station");
-	// 		}
-	// 	});
-	// });
+		})
+	});
 }
 
 exports.fetchUserHistory = function (req, res) {
 	var userId = req.session.userid;
-	console.log(userId);
 
 	mongo.connect(mongoURL, function(){
 		var userCollection = mongo.collection('users');
-	userCollection.find({ email : userId}).toArray(function(err, userResult){
+		userCollection.find({ email : userId}).toArray(function(err, userResult){
 			if (userResult) {
 				var userInfo = userResult[0];
-				console.log(userInfo);
 				var stationInfo = userInfo.stationInfo;
-				// var singleStationInfo = stationInfo[0];
-				console.log(stationInfo);
-				console.log("before sorting",stationInfo);
-				var sortedStationInfo = sortArray(stationInfo);
-				console.log("after sorting",sortedStationInfo);
-				res.send({sortedhistory : sortedStationInfo});
-				}
-			});
+				stationInfo.sort(function(a, b){
+					return b.timeStamp - a.timeStamp;
+				})
+				res.send(stationInfo);
+			}
 		});
+	});
 }
 
-// function insertionSort(files,attrToSortBy){
-//   for(var k=1; k < files.length; k++){
-//      for(var i=k; i > 0 && new Date(files[i][attrToSortBy]) <
-//        new Date(files[i-1][attrToSortBy]); i--){
-//
-//         var tmpFile = files[i];
-//         files[i] = files[i-1];
-//         files[i-1] = tmpFile;
-//
-//      }
-//   }
-//
-// }
+exports.fetchMostVisitedStations = function (req, res) {
+	var userId = req.session.userid;
 
-function sortArray(stationInfo) {
-	stationInfo.sort(function(a,b) {
-		console.log(stationInfo);
-		console.log(a.timeStamp);
-		console.log(b.timeStamp);
-		console.log(a.timeStamp - b.timeStamp);
-		var d1 = new Date(a.timeStamp);
-		var d2 = new Date(b.timeStamp)
-		console.log("date 1",d1);
-		console.log("date 2",d2);
-	return(d1-d2);
-});
+	mongo.connect(mongoURL, function(){
+		var userCollection = mongo.collection('users');
+		userCollection.find({ email : userId}).toArray(function(err, userResult){
+			if (userResult) {
+				var userInfo = userResult[0];
+				var stationInfo = userInfo.stationInfo;
+				stationInfo.sort(function(a, b){
+					return b.counter - a.counter;
+				})
+				res.send(stationInfo);
+			}
+		});
+	});
 }
-
 
 exports.getTotalStations = function(req, res){
 	mongo.connect(mongoURL, function(){
@@ -554,8 +488,6 @@ exports.getTotalStations = function(req, res){
 	});
 };
 
-
-
 exports.addHistory2 = function(req, res){
 	var stationId = req.body.id;
 
@@ -563,31 +495,26 @@ exports.addHistory2 = function(req, res){
 		var coll = mongo.collection('station');
 		coll.findOne( { stationId : stationId }, function(err, user){
 			if (user) {
-			 var currentCounter = user.counter;
-			 currentCounter++;
-			 coll.update( { stationId : stationId}, { $set : {counter : currentCounter}});
-
-				}
-			else {
+				var currentCounter = user.counter;
+				currentCounter++;
+				coll.update( { stationId : stationId}, { $set : {counter : currentCounter}});
+			}else {
 				console.log("error changing status");
 			}
 		});
-
 	});
 
 	mongo.connect(mongoURL, function(){
 		var coll = mongo.collection('users');
 		coll.findOne( { stationId : stationId }, function(err, user){
 			if (user) {
-			 var currentCounter = user.counter;
-			 currentCounter++;
-			 coll.update( { stationId : stationId}, { $set : {counter : currentCounter}});
-
-				}
+				var currentCounter = user.counter;
+				currentCounter++;
+				coll.update( { stationId : stationId}, { $set : {counter : currentCounter}});
+			}
 			else {
 				console.log("error changing status");
 			}
 		});
-
 	});
 }
