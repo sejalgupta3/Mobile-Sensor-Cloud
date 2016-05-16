@@ -198,19 +198,6 @@ exports.deleteSensor = function (req, res) {
  		});
 
  	});
-    /*for (index in stations) {
-     station = stations[index]
-        if(station.id == stationId){
-            var sensorList = station.sensorList;
-            for (index in sensorList){
-                var sensor = sensorList[index];
-                if (sensor.name == sensorName) {
-                    sensorList.splice(index,1);
-                }
-            }
-        }
-    }*/
-	//res.send(stations);
 };
 
 exports.getSensorTypes = function (req, res) {
@@ -235,27 +222,43 @@ exports.getSensorList = function(req, res) {
 };
 
 exports.showSelectedSensorTypeStations = function(req,res) {
-    var requestedsensortype = req.param("selectedType")
-    var requestedStations = [];
+    var requestedsensortype = req.param("selectedType");
+	mongo.connect(mongoURL, function(){
+		var coll = mongo.collection('sensor');
+		var stationCollection = mongo.collection('station');
+		coll.find({}).toArray(function(err, result){
+			if (result) {
+				var stationIds = [];
+				for (index in result) {
+					var sensorObject = result[index];
+					if (sensorObject.sensorType == requestedsensortype){
+						stationIds.push(sensorObject.stationId);
+					}
+				}
 
-    if (requestedsensortype == "All") {
-        requestedStations = stations;
-    }else {
-        for (var index in stations) {
-            var station = stations[index];
-            var sensorList = station.sensorList;
-
-            for (id in sensorList) {
-                var sensor = sensorList[id];
-                var sensorType = sensor.type;
-                if ( sensorType == requestedsensortype) {
-                    requestedStations.push(station);
-                    break;
-                }
-            }
-        }
-    }
-    res.send(requestedStations);
+				mongo.connect(mongoURL, function(){
+					stationCollection.find().toArray(function(err , result){
+						if (result) {
+							var requestedStations = [];
+							for (index in stationIds) {
+								var stationId = stationIds[index];
+								for (stationIndex in result){
+									var stationObject = result[stationIndex];
+									if (stationObject.stationId == stationId){
+										requestedStations.push(stationObject);
+									}
+								}
+							}
+							console.log(requestedStations);
+							res.send(requestedStations);
+						}
+					});
+			});
+			} else {
+				res.send("Problem Displaying station ");
+			}
+		});
+	});
 }
 
 exports.changeStationStatus = function(req, res){
@@ -506,37 +509,6 @@ exports.getTotalStations = function(req, res){
 		});
 	});
 };
-
- function addHistory2(stationId){
-	var stationId = req.body.id;
-
-	mongo.connect(mongoURL, function(){
-		var coll = mongo.collection('station');
-		coll.findOne( { stationId : stationId }, function(err, user){
-			if (user) {
-				var currentCounter = user.counter;
-				currentCounter++;
-				coll.update( { stationId : stationId}, { $set : {counter : currentCounter}});
-			}else {
-				console.log("error changing status");
-			}
-		});
-	});
-
-	mongo.connect(mongoURL, function(){
-		var coll = mongo.collection('users');
-		coll.findOne( { stationId : stationId }, function(err, user){
-			if (user) {
-				var currentCounter = user.counter;
-				currentCounter++;
-				coll.update( { stationId : stationId}, { $set : {counter : currentCounter}});
-			}
-			else {
-				console.log("error changing status");
-			}
-		});
-	});
-}
 
 exports.fetchAdminHistory = function(req,res) {
 
