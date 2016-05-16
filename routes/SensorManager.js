@@ -72,7 +72,7 @@ exports.addStation = function (req, res) {
 	mongo.connect(mongoURL, function(){
 		console.log('Connected to mongo at: ' + mongoURL);
 		var coll = mongo.collection('station');
-		coll.insert({stationName: name, stationId:id, stationLat:lat, stationLong : long , stationStatus : status , counter : 1 }, function(err, result){
+		coll.insert({stationName: name, stationId:id, stationLat:lat, stationLong : long , stationStatus : status , counter : 0 }, function(err, result){
 			if (result) {
 				console.log( "Inserted Id " + result.insertedIds);
 				res.send("Station Added Successful");
@@ -377,6 +377,7 @@ exports.addUserHistory = function(req, res) {
 
 	var stationId = req.body.id;
 	var userId = req.session.userid;
+	addHistory2(stationId);
 
 	var userCollection = mongo.collection('users');
 	var timeStamp = new Date();
@@ -401,7 +402,7 @@ exports.addUserHistory = function(req, res) {
 							} else {
 								for (index in stationInfo) {
 								var stationObject = stationInfo[index]
-								
+
 								if (stationObject.station.stationId == stationId) {
 									var newCounter = stationObject.counter + 1;
 									var newTimeStamp = new Date();
@@ -488,7 +489,7 @@ exports.getTotalStations = function(req, res){
 	});
 };
 
-exports.addHistory2 = function(req, res){
+ function addHistory2(stationId){
 	var stationId = req.body.id;
 
 	mongo.connect(mongoURL, function(){
@@ -517,4 +518,35 @@ exports.addHistory2 = function(req, res){
 			}
 		});
 	});
+}
+
+exports.fetchAdminHistory = function(req,res) {
+
+	var topStations = [];
+	var topUsers = [];
+	mongo.connect(mongoURL, function(){
+		var coll = mongo.collection('station');
+		coll.find().toArray(function(err, stationResult){
+			if (stationResult) {
+				stationResult.sort(function(a, b){
+					return b.counter - a.counter;
+				})
+				stationResult = stationResult.splice(0,5);
+				var coll = mongo.collection('users');
+
+				coll.find().toArray(function(err, userResult){
+					if (userResult) {
+						userResult.sort(function(a, b){
+							return b.counter - a.counter;
+						})
+						userResult = userResult.splice(0,5);
+						console.log("admin history top user",userResult);
+						console.log("admin history top station",stationResult);
+
+						res.send({topUsers : userResult , topStations : stationResult});
+					}
+				});
+			}
+		});
+});
 }

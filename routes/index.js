@@ -23,11 +23,11 @@ exports.register = function (req, res) {
 	lastname = req.body.lastName;
 	email = req.body.email;
 	pwd = req.body.password;
-	
+
 	mongo.connect(mongoURL, function(){
 		console.log('Connected to mongo at: ' + mongoURL);
 		var coll = mongo.collection('users');
-		coll.insert({firstname: firstname, lastname:lastname, email:email, password : pwd , stationInfo : [] }, function(err, user){
+		coll.insert({firstname: firstname, lastname:lastname, email:email, password : pwd , stationInfo : [], counter : 0 }, function(err, user){
 			if (user) {
 				console.log( "Inserted Id " + user.insertedIds);
 				req.session.userid=email;
@@ -46,7 +46,7 @@ exports.validateUser = function(req, res){
 	var username , password   ;
 	username = req.body.username;
 	password = req.body.password;
-	
+
 	mongo.connect(mongoURL, function(){
 		console.log('Connected to mongo at: ' + mongoURL);
 		var coll = mongo.collection('users');

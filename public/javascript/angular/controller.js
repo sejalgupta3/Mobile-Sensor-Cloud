@@ -28,11 +28,11 @@ sensorCloudApp.controller('loginController', function($scope, $http, userService
 
 sensorCloudApp.controller('userDashboardController', function($scope, $http, userService){
 	 $(".button-collapse").sideNav();
-	 
+
 	 userService.fetchHistory(function(history){
 		 $scope.history = history;
 	 });
-	 
+
 	 userService.fetchMostVisitedStations(function(data){
 		 $scope.mostVisitedStation = data;
 	 });
@@ -42,22 +42,31 @@ sensorCloudApp.controller('adminDashboardController', function($scope, $http, us
 	userService.getTotalUsers(function(res){
 		$scope.totalUsers = res;
 	});
-	
+
 	userService.getTotalStations(function(res){
 		$scope.totatStations = res;
+	});
+
+	userService.fetchAdminHistory(function(res){
+		alert(res);
+
+		$scope.adminHistory = res;
+		alert("After getting data",$scope.adminHistory.userResult)
+		alert("After getting data",$scope.adminHistory.topStations)
+
 	});
 });
 
 sensorCloudApp.controller('editsensorManagerController', function($scope,$stateParams, $http,stationService){
 	var selectedStationId = $stateParams.stationId;
-	
+
 	stationService.getStationDetails(selectedStationId,function(list){
 		$scope.stationName = list[0].stationName;
 		$scope.stationId = list[0].stationId;
 		$scope.lat = list[0].stationLat;
 		$scope.lng = list[0].stationLong;
 	});
-	
+
 	$scope.confirmEditStation = function(){
 		stationService.editStation($scope.stationName, $scope.stationId, $scope.lat, $scope.lng);
 	}
@@ -73,14 +82,14 @@ sensorCloudApp.controller('sensorManagerController', function($scope, $statePara
 		sensorService.getSensorList(function(sensor){
 			$scope.sensorList = sensor;
 		});
-		
+
 	});
-	
-		
+
+
 	sensorService.getSensorTypes(function(data){
 		$scope.selectValues = data;
 	});
-	
+
 	var getStation = function(){
 		if($scope.selectedStataionId){
 			for(index in $scope.stationList){
@@ -115,7 +124,7 @@ sensorCloudApp.controller('sensorManagerController', function($scope, $statePara
 	$scope.confirmAddStation = function(){
 		stationService.addStation($scope.stationName, $scope.stationId, $scope.lat, $scope.lng);
 	}
-	
+
 	$scope.confirmDeleteStation = function(selectedStationId){
 		if(confirm("Are you sure you want to delete the station " + selectedStationId)){
 			stationService.deleteStation(selectedStationId, function(res){
@@ -149,7 +158,7 @@ sensorCloudApp.controller('sensorManagerController', function($scope, $statePara
 
 sensorCloudApp.controller('sensorControlController', function($scope, $http, stationService, sensorService){
 	$scope.flag = false;
-	
+
 	stationService.getStationList(function(list){
 		$scope.stations = list;
 		$scope.flag = true;
@@ -157,11 +166,11 @@ sensorCloudApp.controller('sensorControlController', function($scope, $http, sta
 			$scope.sensorList = sensor;
 		});
 	});
-	
+
 	sensorService.getSensorTypes(function(data){
 		$scope.selectValues = data;
 	});
-	
+
 	$scope.choseSensorType = function() {
         var userValues = {
         	selectedType : $scope.selectedSensorType
@@ -174,7 +183,7 @@ sensorCloudApp.controller('sensorControlController', function($scope, $http, sta
 	    	   console.log('Error: ' + res);
 	       });
     }
-    
+
     $scope.changeStationStatus = function(stationId, stationName){
     	if(confirm("Are you sure you want to change the status of the station " + stationName )){
     		stationService.changeStationStatus(stationId);
@@ -184,27 +193,27 @@ sensorCloudApp.controller('sensorControlController', function($scope, $http, sta
 
 sensorCloudApp.controller('sensorDataController', function($scope, $http, $stateParams, sensorDataService, sensorService, stationService){
 stationService.addUserHistory($stateParams.stationId);
-	
+
 	sensorDataService.getSensorData($stateParams.stationId, function(data){
 		$scope.sensorList = data.ListOfSensor;
-		$scope.configList = []; 
+		$scope.configList = [];
 		$scope.getgraph= function(){
 			for(var j =0 ; j < $scope.sensorList.length ; j++){
-				var s = []; 
+				var s = [];
 				var d = [];
 				var sensor = data.ListOfSensor[j];
 				for(var i =0 ; i < data.arr.length ; i++){
-					if (data.arr[i].sensorName == sensor.sensorName && data.arr[i].data != 'MM' && data.arr[i].data != undefined){	
+					if (data.arr[i].sensorName == sensor.sensorName && data.arr[i].data != 'MM' && data.arr[i].data != undefined){
 						d.push(data.arr[i].date);
-					    s.push(data.arr[i].data/1); 
+					    s.push(data.arr[i].data/1);
 					}
 				}
 				$scope.ShowDriverDetails(s,d,sensor);
 			}
 		};
-		$scope.getgraph(); 
+		$scope.getgraph();
 	});
-	
+
 	$scope.changeSensorStatus = function(stationId, sensorName){
     	if(confirm("Are you sure you want to change the status of the sensorName: " + sensorName )){
     		sensorService.changeSensorStatus(stationId, sensorName, function(status){
@@ -219,7 +228,7 @@ stationService.addUserHistory($stateParams.stationId);
     		});
     	}
     }
-    
+
     $scope.showSensorType = function(){
 		var sensor = $scope.selectedSensorType;
 		if(sensor != ""){
@@ -236,15 +245,15 @@ stationService.addUserHistory($stateParams.stationId);
 			}
 		}
     }
-	
+
 	$scope.ShowDriverDetails = function(s,d,sensor) {
 		var chart1 = {
 			options: {
 				chart: {
-					type: 'line',   		             
+					type: 'line',
     		     }
     		},
-    		series: [{         
+    		series: [{
     			data : s,
     		}],
 	        xAxis: {
@@ -252,14 +261,14 @@ stationService.addUserHistory($stateParams.stationId);
 	        },
 	        loading: false
 	    }
-		
+
 		var chart2 = {
 			options: {
 				chart: {
-					type: 'bar',   		             
+					type: 'bar',
     		     }
     		},
-    		series: [{         
+    		series: [{
     			data : s,
     		}],
 	        xAxis: {
@@ -267,14 +276,14 @@ stationService.addUserHistory($stateParams.stationId);
 	        },
 	        loading: false
 	    }
-		
+
 		var chart3 = {
 			options: {
 				chart: {
-					type: 'pie',   		             
+					type: 'pie',
     		     }
     		},
-    		series: [{         
+    		series: [{
     			data : s,
     		}],
 	        xAxis: {
@@ -282,27 +291,27 @@ stationService.addUserHistory($stateParams.stationId);
 	        },
 	        loading: false
 	    }
-		
+
 		var chart4 = {
 			options: {
 				chart: {
-					type: 'column',   		             
+					type: 'column',
     		     }
     		},
-    		series: [{         
+    		series: [{
     			data : s,
     		}],
 	        xAxis: {
 	        	categories: d
 	        },
 	        loading: false
-	    }	
-		
+	    }
+
 		var configData = {
 			sensor: {},
 			config : []
 		};
-		 
+
 		configData.sensor = sensor;
 		configData.config.push(chart1);
 		configData.config.push(chart2);
