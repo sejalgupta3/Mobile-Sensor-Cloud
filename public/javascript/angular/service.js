@@ -71,6 +71,14 @@ sensorCloudApp.service('userService', function($http, $state){
 			callback(res);
 		});
 	}
+	
+	this.getBillingInfo = function(callback){
+		alert("service");
+		$http.get('/getBillingInfo')
+		.success(function(res){
+			callback(res);
+		});
+	}
 });
 
 sensorCloudApp.service('verifyUserService', function($http, $state){

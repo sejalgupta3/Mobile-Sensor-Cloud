@@ -55,7 +55,9 @@ app.get('/getTotalStations', sensorManager.getTotalStations);
 app.get('/fetchUserHistory', sensorManager.fetchUserHistory);
 app.post('/addUserHistory', sensorManager.addUserHistory);
 app.get('/fetchMostVisitedStations', sensorManager.fetchMostVisitedStations);
-app.get('/fetchAdminHistory', sensorManager.fetchAdminHistory)
+app.get('/fetchAdminHistory', sensorManager.fetchAdminHistory);
+app.get('/getBillingInfo', sensorManager.getBillingInfo);
+
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

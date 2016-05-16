@@ -458,6 +458,22 @@ exports.fetchUserHistory = function (req, res) {
 	});
 }
 
+
+exports.getBillingInfo = function (req, res){
+	var userId = req.session.userid;
+	var billingObject;
+	mongo.connect(mongoURL, function(){
+		var userCollection = mongo.collection('users');
+		userCollection.find({email : userId}).toArray(function(err, userResult){
+			console.log("Firstly Came", userResult[0]);
+			billingObject= userResult[0].counter;
+			console.log("Came here",billingObject);
+			res.send(billingObject * 0.10 + "");
+		});
+			
+		});
+}
+
 exports.fetchMostVisitedStations = function (req, res) {
 	var userId = req.session.userid;
 
