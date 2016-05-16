@@ -265,22 +265,19 @@ exports.changeStationStatus = function(req, res){
 		var coll = mongo.collection('station');
 		coll.findOne( { stationId : stationId}, function(err, user){
 			if (user) {
-			 var currentStatus = user.stationStatus;
-			 if (currentStatus === "active"){
-				 coll.update( { stationId : stationId}, { $set : {stationStatus : "deactive"}});
-			 }
-			 if (currentStatus === "deactive"){
-				 coll.update( { stationId : stationId}, { $set : {stationStatus : "active"}});
-			 }
-
+				var currentStatus = user.stationStatus;
+				if (currentStatus === "active"){
+					coll.update( { stationId : stationId}, { $set : {stationStatus : "deactive"}});
 				}
-			else {
+				if (currentStatus === "deactive"){
+					coll.update( { stationId : stationId}, { $set : {stationStatus : "active"}});
+				}
+				res.send("Success");
+			}else {
 				console.log("error changing status");
 			}
 		});
-
 	});
-	res.send("Success");
 };
 
 exports.changeSensorStatus = function(req, res){
@@ -290,20 +287,18 @@ exports.changeSensorStatus = function(req, res){
 		var coll = mongo.collection('sensor');
 		coll.findOne( { stationId : stationId , sensorName :sensorName }, function(err, user){
 			if (user) {
-			 var currentStatus = user.sensorStatus;
-			 if (currentStatus === "active"){
-				 coll.update( { stationId : stationId,sensorName :sensorName}, { $set : {sensorStatus : "deactive"}});
-			 }
-			 if (currentStatus === "deactive"){
-				 coll.update( { stationId : stationId , sensorName :sensorName}, { $set : {sensorStatus : "active"}});
-			 }
-
+				var currentStatus = user.sensorStatus;
+				if (currentStatus === "active"){
+					coll.update( { stationId : stationId,sensorName :sensorName}, { $set : {sensorStatus : "deactive"}});
 				}
-			else {
+				if (currentStatus === "deactive"){
+					coll.update( { stationId : stationId , sensorName :sensorName}, { $set : {sensorStatus : "active"}});
+				}
+				res.send("Success");
+			}else {
 				console.log("error changing status");
 			}
 		});
-
 	});
 }
 

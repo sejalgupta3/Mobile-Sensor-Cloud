@@ -6,6 +6,15 @@
 </style>
 
 <div class="row">
+	<div>
+       	<select class="browser-default" ng-model="selectedSensorType" ng-change="choseSensorType()">
+       		<option value="" selected>All</option>
+       		<option ng-repeat="value in selectValues">{{value}}</option>
+       	</select>
+   	</div>
+</div>
+
+<div class="row">
 	<div class="col m12" style="padding:2%">
       	<div ng-if="flag">
 			<div my-map="" stations="stations" sensors="sensorList" user="endUser"></div>
