@@ -5,14 +5,15 @@
 	}
 </style>
 
-<div class="row">
-	<div>
-    	<select class="browser-default" ng-model="selectedSensorType" ng-change = "choseSensorType()" material-select>
-    		<option value="" selected>All</option>
-       		<option ng-repeat="value in selectValues">{{value}}</option>
-   		</select>
-	</div>
+<div class="row loading" style="position:relative;top:40px;">
+	<div class="col m4 offset-m4">
+		<p>Loading....</p>
+		<div class="progress">
+    		<div class="indeterminate"></div>
+		</div>
+	</div>	
 </div>
+
 <div class="row">
 	<div class="col m12" style="padding:2%">
       	<div ng-if="flag">

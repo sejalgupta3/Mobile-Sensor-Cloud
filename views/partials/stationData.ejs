@@ -7,6 +7,15 @@
    	</div>
 </div>
 
+<div class="row loading" style="position:relative;top:40px;">
+	<div class="col m4 offset-m4">
+		<p>Loading....</p>
+		<div class="progress">
+    		<div class="indeterminate"></div>
+		</div>
+	</div>	
+</div>
+
 <div class="row">
 	<div class="col m12" ng-repeat = "data in configList" ng-hide="{{data.sensor.sensorName}}showSensor">
 		<h1>{{data.sensor.sensorType}}</h1>
