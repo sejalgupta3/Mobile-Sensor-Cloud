@@ -377,7 +377,6 @@ exports.addUserHistory = function(req, res) {
 
 	var stationId = req.body.id;
 	var userId = req.session.userid;
-	addHistory2(stationId);
 
 	var userCollection = mongo.collection('users');
 	var timeStamp = new Date();
@@ -386,6 +385,8 @@ exports.addUserHistory = function(req, res) {
 	userCollection.find({ email : userId}).toArray(function(err, userResult){
 			if (userResult) {
 				var userInfo = userResult[0];
+				var currentUserCounter = userInfo.counter;
+				currentUserCounter++;
 				var stationInfo = userInfo.stationInfo;
 				var stationCollection = mongo.collection('station');
 				 mongo.connect(mongoURL, function(){
@@ -398,7 +399,7 @@ exports.addUserHistory = function(req, res) {
 									timeStamp : timeStamp
 								}
 								stationInfo.push(stationData);
-								userCollection.update({email : userId},{$set : {stationInfo : stationInfo}})
+								userCollection.update({email : userId},{$set : {stationInfo : stationInfo, counter : currentUserCounter}})
 							} else {
 								for (index in stationInfo) {
 								var stationObject = stationInfo[index]
@@ -415,7 +416,7 @@ exports.addUserHistory = function(req, res) {
 									}
 
 									stationInfo[index] = newStationInfo;
-									userCollection.update({email : userId},{$set : {stationInfo : stationInfo}});
+									userCollection.update({email : userId},{$set : {stationInfo : stationInfo, counter: currentUserCounter}});
 									return ;
 								}
 							}
@@ -425,8 +426,14 @@ exports.addUserHistory = function(req, res) {
 								timeStamp : timeStamp
 							}
 							stationInfo.push(stationData);
-							userCollection.update({email : userId},{$set : {stationInfo : stationInfo}})
+							userCollection.update({email : userId},{$set : {stationInfo : stationInfo, counter : currentUserCounter}})
+
 							}
+
+							var currentCounter = result.counter;
+							currentCounter++;
+							stationCollection.update( { stationId : stationId}, { $set : {counter : currentCounter}});
+
 						}
 						else {
 							console.log("Problem Displaying station");
