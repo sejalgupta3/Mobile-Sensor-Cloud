@@ -182,8 +182,12 @@ sensorCloudApp.controller('sensorControlController', function($scope, $http, sta
     }
 });
 
-sensorCloudApp.controller('sensorDataController', function($scope, $http, $stateParams, sensorDataService, sensorService, stationService){
-stationService.addUserHistory($stateParams.stationId);
+sensorCloudApp.controller('sensorDataController', function($scope, $http, $stateParams, sensorDataService, sensorService, stationService, userService){
+	userService.getCurrentUser(function(user){
+		if(user != 'admin'){
+			stationService.addUserHistory($stateParams.stationId);
+		}
+	});
 	
 	sensorDataService.getSensorData($stateParams.stationId, function(data){
 		$scope.sensorList = data.ListOfSensor;
@@ -202,6 +206,7 @@ stationService.addUserHistory($stateParams.stationId);
 				$scope.ShowDriverDetails(s,d,sensor);
 			}
 		};
+		$(".loading").hide();
 		$scope.getgraph(); 
 	});
 	
