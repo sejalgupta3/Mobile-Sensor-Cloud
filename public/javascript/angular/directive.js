@@ -48,10 +48,18 @@ sensorCloudApp.directive('myMap', function() {
                 
                 // create new window
                 infoWindow = new google.maps.InfoWindow();
-                if(scope.user == 'admin'){
-                    infoWindow.setContent('<div><strong>' + title + '</strong></div><div>'+ content +'</div><div><a href="#/stationData/'+id+'">Read More</a></div>');
+                if(status == 'active'){
+                	 if(scope.user == 'admin'){
+                         infoWindow.setContent('<div><strong>' + title + '</strong></div><div>'+ content +'</div><div><a href="#/stationData/'+id+'">Read More</a></div>');
+                     }else{
+                         infoWindow.setContent('<div><strong>' + title + '</strong></div><div>'+ content +'</div><div><a href="#/userSensorData/'+id+'">Read More</a></div>');
+                     }
                 }else{
-                    infoWindow.setContent('<div><strong>' + title + '</strong></div><div>'+ content +'</div><div><a href="#/userSensorData/'+id+'">Read More</a></div>');
+                	if(scope.user == 'admin'){
+                        infoWindow.setContent('<div><strong>' + title + '</strong></div><div>'+ content +'</div>');
+                    }else{
+                        infoWindow.setContent('<div><strong>' + title + '</strong></div><div>'+ content +'</div>');
+                    }
                 }
                 infoWindow.open(map, marker);
             });
