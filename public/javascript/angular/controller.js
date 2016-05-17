@@ -256,14 +256,13 @@ sensorCloudApp.controller('sensorDataController', function($scope, $http, $state
 	$scope.changeSensorStatus = function(stationId, sensorName){
     	if(confirm("Are you sure you want to change the status of the sensorName: " + sensorName )){
     		sensorService.changeSensorStatus(stationId, sensorName, function(status){
-    			alert(status);
-    			if(status == "Success"){
-    				if($scope[sensorName + 'showStatus']){
-    					$scope[sensorName + 'showStatus'] = false;
-    				}else{
-    					$scope[sensorName + 'showStatus'] = true;
-    				}
-        		}
+//    			if(status == "Success"){
+//    				if($scope[sensorName + 'showStatus']){
+//    					$scope[sensorName + 'showStatus'] = false;
+//    				}else{
+//    					$scope[sensorName + 'showStatus'] = true;
+//    				}
+//        		}
     		});
     	}
     }
@@ -292,6 +291,9 @@ sensorCloudApp.controller('sensorDataController', function($scope, $http, $state
 					type: 'line',
     		     }
     		},
+    		title: {
+    			text: 'Line Graph',
+    		},
     		series: [{
     			data : s,
     		}],
@@ -307,20 +309,8 @@ sensorCloudApp.controller('sensorDataController', function($scope, $http, $state
 					type: 'bar',
     		     }
     		},
-    		series: [{
-    			data : s,
-    		}],
-	        xAxis: {
-	        	categories: d
-	        },
-	        loading: false
-	    }
-
-		var chart3 = {
-			options: {
-				chart: {
-					type: 'pie',
-    		     }
+    		title: {
+    			text: 'Bar Graph',
     		},
     		series: [{
     			data : s,
@@ -331,11 +321,29 @@ sensorCloudApp.controller('sensorDataController', function($scope, $http, $state
 	        loading: false
 	    }
 
+//		var chart3 = {
+//			options: {
+//				chart: {
+//					type: 'pie',
+//    		     }
+//    		},
+//    		series: [{
+//    			data : s,
+//    		}],
+//	        xAxis: {
+//	        	categories: d
+//	        },
+//	        loading: false
+//	    }
+
 		var chart4 = {
 			options: {
 				chart: {
 					type: 'column',
     		     }
+    		},
+    		title: {
+    			text: 'Column Graph',
     		},
     		series: [{
     			data : s,
@@ -354,7 +362,7 @@ sensorCloudApp.controller('sensorDataController', function($scope, $http, $state
 		configData.sensor = sensor;
 		configData.config.push(chart1);
 		configData.config.push(chart2);
-		configData.config.push(chart3);
+//		configData.config.push(chart3);
 		configData.config.push(chart4);
 		$scope.configList.push(configData);
 	}
