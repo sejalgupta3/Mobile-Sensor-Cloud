@@ -18,7 +18,7 @@
 
 <div class="row">
 	<div class="col m12" ng-repeat = "data in configList" ng-hide="{{data.sensor.sensorName}}showSensor">
-		<h1>{{data.sensor.sensorType}}</h1>
+		<h3 class="center-align">{{data.sensor.sensorType}}</h3>
 		<div class="switch">
 	 		<label>
 				Off
@@ -28,7 +28,7 @@
 	 		</label>
    		</div>
 		<div ng-repeat = "conf in data.config">
-			<highchart config=conf ng-hide="{{data.sensor.sensorName}}showStatus"></highchart>
+			<highchart config=conf></highchart>
 		</div>
 	</div>
 </div>		
