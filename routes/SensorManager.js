@@ -501,7 +501,12 @@ exports.getBillingInfo = function (req, res){
 			console.log("Firstly Came", userResult[0]);
 			billingObject= userResult[0].counter;
 			console.log("Came here",billingObject);
-			res.send(billingObject * 0.10 + "");
+			if (billingObject < 10 )
+			res.send(billingObject * 0.50 + "");
+			else if (billingObject < 30 && billingObject > 11 )
+			res.send(billingObject * 0.30 + "");
+			else if (billingObject > 31 )
+				res.send(billingObject * 0.10 + "");
 		});
 			
 		});
