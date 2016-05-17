@@ -1,7 +1,7 @@
 var users = [];
 var station = [];
 var mongo = require("./mongo");
-var mongoURL = "mongodb://localhost:27017/sensor";
+var mongoURL = "mongodb://ec2-52-35-61-80.us-west-2.compute.amazonaws.com:27017/sensor";
 
 exports.index = function(req, res){
 	res.render('index');
