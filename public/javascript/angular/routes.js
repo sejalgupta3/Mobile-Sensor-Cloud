@@ -13,6 +13,7 @@ sensorCloudApp.config(function($stateProvider, $urlRouterProvider) {
 		.state('adminNavigation', {
 			templateUrl: '/partials/adminDashboardNavigation.ejs',
 		    abstract: true,
+		    controller: 'userNavigationController'
 		})
     	.state('home', {
             url: '/',
