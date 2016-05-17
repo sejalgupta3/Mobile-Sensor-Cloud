@@ -122,9 +122,11 @@ exports.deleteStation = function (req, res) {
     mongo.connect(mongoURL, function(){
  		console.log('Connected to mongo at: ' + mongoURL);
  		var coll = mongo.collection('station');
+ 		var col2 = mongo.collection('sensor');
  		coll.remove({  stationId: stationId
  			   },function(err, user){
  			if (user) {
+ 				col2.remove({  stationId: stationId});
  				res.send("Delete successful");
 
  			} else {
