@@ -13,7 +13,7 @@ sensorCloudApp.config(function($stateProvider, $urlRouterProvider) {
 		.state('adminNavigation', {
 			templateUrl: '/partials/adminDashboardNavigation.ejs',
 		    abstract: true,
-		    controller: 'userNavigationController'
+		    controller: 'adminNavigationController'
 		})
     	.state('home', {
             url: '/',
@@ -32,6 +32,12 @@ sensorCloudApp.config(function($stateProvider, $urlRouterProvider) {
             parent: 'navigation',
             templateUrl: '/partials/userRegister.ejs',
             controller: 'userRegisterController'
+        })
+        .state('billingModule', {
+            url: '/billingModule',
+            parent: 'userNavigation',
+            templateUrl: '/partials/billingModule.ejs',
+            controller: 'userBillingModule'
         })
         .state('userDashboard', {
             url: '/userDashboard',

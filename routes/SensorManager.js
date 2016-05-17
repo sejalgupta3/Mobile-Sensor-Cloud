@@ -502,10 +502,10 @@ exports.getBillingInfo = function (req, res){
 			billingObject= userResult[0].counter;
 			console.log("Came here",billingObject);
 			if (billingObject < 10 )
-			res.send(billingObject * 0.50 + "");
-			else if (billingObject < 30 && billingObject > 11 )
-			res.send(billingObject * 0.30 + "");
-			else if (billingObject > 31 )
+				res.send(billingObject * 0.50 + "");
+			else if (billingObject < 30 && billingObject >= 10 )
+				res.send(billingObject * 0.30 + "");
+			else if (billingObject >= 30 )
 				res.send(billingObject * 0.10 + "");
 		});
 			

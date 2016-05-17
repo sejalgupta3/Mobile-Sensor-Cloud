@@ -1,0 +1,22 @@
+<div class="row">
+	 <table>
+        <thead>
+          <tr>
+          	  <th>Count</th>
+              <th>Station</th>
+              <th>Time</th>
+              <th>Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="data in history">
+            <td>{{$index + 1}}</td>
+            <td>{{data.station.stationName}}</td>
+            <td>{{data.timeStamp}}</td>
+            <td ng-if="data.counter < 10">{{(data.counter + 1) * 0.50}}</td>
+            <td ng-if="data.counter >= 10 && data.counter < 30">{{(data.counter + 1) * 0.30}}</td>
+            <td ng-if="data.counter >=30 && data.counter < 31">{{(data.counter + 1) * 0.10}}</td>
+          </tr>
+        </tbody>
+      </table>
+</div>

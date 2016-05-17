@@ -3,12 +3,39 @@ sensorCloudApp.controller('mainController', function($scope) {
 });
 
 sensorCloudApp.controller('userNavigationController', function($scope, $http, $state, userService) {
+	alert("1");
 	userService.getCurrentUser(function(res){
 		$scope.useremail = res;
 		$scope.logout = function(){
 			userService.logout();
 		}
 	});
+	
+	userService.getBillingInfo(function(data){
+		alert("billing 1");
+		 $scope.amount = data;
+	 });
+});
+
+sensorCloudApp.controller('adminNavigationController', function($scope, $http, $state, userService) {
+	alert("2");
+	userService.getCurrentUser(function(res){
+		$scope.useremail = res;
+		$scope.logout = function(){
+			userService.logout();
+		}
+	});
+});
+
+sensorCloudApp.controller('userBillingModule', function($scope, $http, $state, userService) {
+	userService.getBillingInfo(function(data){
+		alert("billing 2");
+		 $scope.amount = data;
+	});
+	
+	userService.fetchHistory(function(history){
+		 $scope.history = history;
+	 });
 });
 
 sensorCloudApp.controller('userRegisterController', function($scope, $http, $state, userService) {
@@ -31,7 +58,7 @@ sensorCloudApp.controller('loginController', function($scope, $http, userService
 
 sensorCloudApp.controller('userDashboardController', function($scope, $http, userService){
 	 $(".button-collapse").sideNav();
-
+	 alert("3");
 	 userService.fetchHistory(function(history){
 		 $scope.history = history;
 	 });
@@ -39,13 +66,10 @@ sensorCloudApp.controller('userDashboardController', function($scope, $http, use
 	 userService.fetchMostVisitedStations(function(data){
 		 $scope.mostVisitedStation = data;
 	 });
-	 
-	 userService.getBillingInfo(function(data){
-		 $scope.amount = data;
-	 });
 });
 
 sensorCloudApp.controller('adminDashboardController', function($scope, $http, userService){
+	alert("4");
 	userService.getTotalUsers(function(res){
 		$scope.totalUsers = res;
 	});
@@ -55,12 +79,7 @@ sensorCloudApp.controller('adminDashboardController', function($scope, $http, us
 	});
 
 	userService.fetchAdminHistory(function(res){
-		alert(res);
-
 		$scope.adminHistory = res;
-		alert("After getting data",$scope.adminHistory.userResult)
-		alert("After getting data",$scope.adminHistory.topStations)
-
 	});
 });
 
