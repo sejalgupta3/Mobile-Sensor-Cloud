@@ -3,7 +3,6 @@ sensorCloudApp.controller('mainController', function($scope) {
 });
 
 sensorCloudApp.controller('userNavigationController', function($scope, $http, $state, userService) {
-	alert("1");
 	userService.getCurrentUser(function(res){
 		$scope.useremail = res;
 		$scope.logout = function(){
@@ -12,13 +11,11 @@ sensorCloudApp.controller('userNavigationController', function($scope, $http, $s
 	});
 	
 	userService.getBillingInfo(function(data){
-		alert("billing 1");
 		 $scope.amount = data;
 	 });
 });
 
 sensorCloudApp.controller('adminNavigationController', function($scope, $http, $state, userService) {
-	alert("2");
 	userService.getCurrentUser(function(res){
 		$scope.useremail = res;
 		$scope.logout = function(){
@@ -29,7 +26,6 @@ sensorCloudApp.controller('adminNavigationController', function($scope, $http, $
 
 sensorCloudApp.controller('userBillingModule', function($scope, $http, $state, userService) {
 	userService.getBillingInfo(function(data){
-		alert("billing 2");
 		 $scope.amount = data;
 	});
 	
@@ -58,7 +54,7 @@ sensorCloudApp.controller('loginController', function($scope, $http, userService
 
 sensorCloudApp.controller('userDashboardController', function($scope, $http, userService){
 	 $(".button-collapse").sideNav();
-	 alert("3");
+	
 	 userService.fetchHistory(function(history){
 		 $scope.history = history;
 	 });
@@ -69,7 +65,6 @@ sensorCloudApp.controller('userDashboardController', function($scope, $http, use
 });
 
 sensorCloudApp.controller('adminDashboardController', function($scope, $http, userService){
-	alert("4");
 	userService.getTotalUsers(function(res){
 		$scope.totalUsers = res;
 	});
