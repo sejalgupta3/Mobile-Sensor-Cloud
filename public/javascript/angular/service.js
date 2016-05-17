@@ -80,7 +80,6 @@ sensorCloudApp.service('userService', function($http, $state){
 	}
 	
 	this.getBillingInfo = function(callback){
-		alert("service");
 		$http.get('/getBillingInfo')
 		.success(function(res){
 			callback(res);

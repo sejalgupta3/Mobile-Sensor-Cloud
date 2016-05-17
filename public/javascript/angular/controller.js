@@ -9,10 +9,6 @@ sensorCloudApp.controller('userNavigationController', function($scope, $http, $s
 			userService.logout();
 		}
 	});
-	
-	userService.getBillingInfo(function(data){
-		 $scope.amount = data;
-	 });
 });
 
 sensorCloudApp.controller('adminNavigationController', function($scope, $http, $state, userService) {
@@ -61,6 +57,10 @@ sensorCloudApp.controller('userDashboardController', function($scope, $http, use
 
 	 userService.fetchMostVisitedStations(function(data){
 		 $scope.mostVisitedStation = data;
+	 });
+	 
+	 userService.getBillingInfo(function(data){
+		 $scope.amount = data;
 	 });
 });
 

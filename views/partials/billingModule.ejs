@@ -2,9 +2,9 @@
 	 <table>
         <thead>
           <tr>
-          	  <th>Count</th>
+          	  <th>No</th>
               <th>Station</th>
-              <th>Time</th>
+              <th>No Of Times Visited</th>
               <th>Amount</th>
           </tr>
         </thead>
@@ -12,10 +12,8 @@
           <tr ng-repeat="data in history">
             <td>{{$index + 1}}</td>
             <td>{{data.station.stationName}}</td>
-            <td>{{data.timeStamp}}</td>
-            <td ng-if="data.counter < 10">{{(data.counter + 1) * 0.50}}</td>
-            <td ng-if="data.counter >= 10 && data.counter < 30">{{(data.counter + 1) * 0.30}}</td>
-            <td ng-if="data.counter >=30 && data.counter < 31">{{(data.counter + 1) * 0.10}}</td>
+            <td>{{data.counter + 1}}</td>
+            <td>{{(data.counter + 1) * 0.50}}$</td>
           </tr>
         </tbody>
       </table>
