@@ -1,19 +1,19 @@
 <div style="padding:2%;">
 	<div class="row">
 		<div class="col m4">
-			<h2>Total Users: {{totalUsers}}</h2>
+			<h5 class="z-depth-2 #c8e6c9 green lighten-4" style="width:60%;padding:5%;">Total Users: {{totalUsers}}</h5>
 		</div>
 		<div class="col m4">
-			<h2>Total Stations: {{totatStations}}</h2>
+			<h5 class="z-depth-2 #fff9c4 yellow lighten-4" style="width:60%;padding:5%;">Total Stations: {{totatStations}}</h5>
 		</div>
 		<div class="col m4">
-			<h2>Total Sensors Types: 9</h2>
+			<h5 class="z-depth-2 #bbdefb blue lighten-4" style="width:60%;padding:5%;">Total Sensors Types: 9</h5>
 		</div>
 	</div>
 	<div class="row">
 		<div class="col m6">
 			<h4>Top Users</h4>
-			  <ul class="collapsible" data-collapsible="accordion">
+			  <ul class="collapsible z-depth-2" data-collapsible="accordion">
 				  <li ng-repeat="data in adminHistory.topUsers">
 					  <div class="collapsible-header">{{data.firstname + data.lastname}}</div>
 					  <div class="collapsible-body">
@@ -26,7 +26,7 @@
 		</div>
 		<div class="col m6">
 			<h4>Top Stations</h4>
-			<ul class="collapsible" data-collapsible="accordion">
+			<ul class="collapsible z-depth-2" data-collapsible="accordion">
 				<li ng-repeat="data in adminHistory.topStations">
 					<div class="collapsible-header">{{data.stationName}}</div>
 					<div class="collapsible-body">
