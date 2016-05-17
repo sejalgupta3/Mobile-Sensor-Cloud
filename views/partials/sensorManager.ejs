@@ -28,7 +28,7 @@
 						<span ng-if="sensor.sensorStatus == 'deactive'" style="color:red">Inactive</span>
 					</td>
 					<td class="right-align">
-						<a class="waves-effect waves-light btn green" href="#/editSensor/{{station.sensorId}}/{{sensor.sensorName}}"><i class="material-icons">edit</i></a>
+						<a class="waves-effect waves-light btn green" href="#/editSensor/{{station.stationId}}/{{sensor.sensorName}}"><i class="material-icons">edit</i></a>
 						<a class="waves-effect waves-light btn green" ng-click="confirmDeleteSensor(station.stationId, sensor.sensorName)"><i class="material-icons">delete</i></a>
 					</td>
 				</tr>

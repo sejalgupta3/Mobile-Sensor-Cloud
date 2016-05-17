@@ -158,23 +158,30 @@ exports.addSensor = function (req, res) {
 };
 
 exports.editSensor = function (req, res) {
-    var stationId = req.param("station");
+	var stationId = req.param("station");
     var sensorName = req.param("name");
     var sensorType = req.param("type");
     var sensorStatus = req.param("status");
 
-    var sensorToUpdate = { name: sensorName, type : sensorType, status : sensorStatus}
+    mongo.connect(mongoURL, function(){
+ 		console.log('Connected to mongo at: ' + mongoURL);
+ 		var coll = mongo.collection('sensor');
+ 		coll.update({ stationId: req.body.stationId , sensorName : req.body.selectedSensor },
+ 			   { $set:
+ 			      {
+ 				  sensorName: req.body.sensorName,
+ 				 sensorType : req.body.sensorType
+ 			      }
+ 			   },function(err, user){
+ 			if (user) {
+ 				res.send("Edit successful");
 
-    var station;
-    for (stationIndex in stations){
-         station = stations[stationIndex]
-        if(station.id == stationId){
-        	console.log(station.Id);
-        	console.log(station);
-        	station.sensorList.splice(stationIndex,1,sensorToUpdate);
-        }
-    }
-	res.send(station);
+ 			} else {
+ 				res.send("Error Editing Station");
+ 			}
+ 		});
+
+ 	});
 };
 
 exports.deleteSensor = function (req, res) {
@@ -220,6 +227,25 @@ exports.getSensorList = function(req, res) {
 		});
 	});
 };
+
+exports.getSensorDetails = function(req, res) {
+	console.log("getSensorDetails : " + req.body.stationId );
+	mongo.connect(mongoURL, function(){
+		console.log('Connected to mongo at: ' + mongoURL);
+		var coll = mongo.collection('sensor');
+		coll.find({stationId : req.body.stationId , sensorName : req.body.sensorName  }).toArray(function(err, result){
+			if (result) {
+				console.log(result);
+				 res.send(result);
+
+			} else {
+				console.log("Problem Editing sensor");
+				res.send("Problem Editing sensor ");
+			}
+		});
+	});
+};
+
 
 exports.showSelectedSensorTypeStations = function(req,res) {
     var requestedsensortype = req.param("selectedType");

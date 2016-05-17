@@ -76,6 +76,31 @@ sensorCloudApp.controller('editsensorManagerController', function($scope,$stateP
 	}
 });
 
+
+sensorCloudApp.controller('editsensorController', function($scope,$stateParams, $http,stationService, sensorService){
+	
+	var selectedStationId = $stateParams.stationId;
+	var selectedSensorName = $stateParams.sensorName;
+//	alert(selectedStationId);
+//	alert(selectedSensorName);
+	stationService.getSensorDetails(selectedStationId,selectedSensorName, function(list){
+		alert("sensortype : " + list[0].sensorType);
+		$scope.sensorName = list[0].sensorName;
+		$scope.sensorType = list[0].sensorType;
+		
+	});
+	
+	sensorService.getSensorTypes(function(data){
+		$scope.selectValues = data;
+	});
+	
+	$scope.confirmEditSensor = function(){
+		alert($scope.sensorName);
+		sensorService.editSensor($scope.sensorName, $scope.sensorType, selectedStationId , selectedSensorName);
+	}
+
+});
+
 sensorCloudApp.controller('sensorManagerController', function($scope, $stateParams ,$http, sensorService, stationService){
 	$scope.selectedStataionId = $stateParams.stationId;
 	$scope.selectedSensorName = $stateParams.sensorName;
@@ -144,9 +169,9 @@ sensorCloudApp.controller('sensorManagerController', function($scope, $statePara
 		sensorService.addSensor($scope.sensorName, $scope.sensorType, $scope.selectedStataionId);
 	}
 
-	$scope.confirmEditSensor = function(){
+	/*$scope.confirmEditSensor = function(){
 		sensorService.editSensor($scope.sensorName, $scope.sensorType, $scope.selectedStataionId);
-	}
+	}*/
 
 	$scope.confirmDeleteSensor = function(selectedStationId, selectedSensorName){
 		if(confirm("Are you sure you want to delete the sensor" + selectedStationId + " " + selectedSensorName  )){

@@ -104,7 +104,7 @@ sensorCloudApp.config(function($stateProvider, $urlRouterProvider) {
 			url: '/editSensor/:stationId/:sensorName',
 	        parent: 'adminNavigation',
 	        templateUrl: '/partials/editSensor.ejs',
-	        controller: 'sensorManagerController'
+	        controller: 'editsensorController'
 	    })
 	    .state('sensorController', {
 			url: '/sensorController',
