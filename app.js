@@ -58,6 +58,7 @@ app.post('/addUserHistory', sensorManager.addUserHistory);
 app.get('/fetchMostVisitedStations', sensorManager.fetchMostVisitedStations);
 app.get('/fetchAdminHistory', sensorManager.fetchAdminHistory);
 app.get('/getBillingInfo', sensorManager.getBillingInfo);
+app.get('/logout', routes.logout);
 
 
 http.createServer(app).listen(app.get('port'), function(){

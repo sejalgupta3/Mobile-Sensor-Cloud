@@ -17,6 +17,12 @@ exports.getCurrentUser = function(req, res){
 	res.send(req.session.userid);
 }
 
+exports.logout = function(req,res)
+{
+	req.session.destroy();
+	res.send("success");
+};
+
 exports.register = function (req, res) {
 	var email , pwd  , firstname, lastname  ;
 	firstname = req.body.firstName;

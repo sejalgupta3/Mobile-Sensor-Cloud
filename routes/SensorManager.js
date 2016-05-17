@@ -137,6 +137,8 @@ exports.deleteStation = function (req, res) {
  	});
 };
 
+
+
 exports.addSensor = function (req, res) {
     var stationId = req.param("station");
     var sensorName = req.param("name");

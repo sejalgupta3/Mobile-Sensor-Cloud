@@ -5,6 +5,9 @@ sensorCloudApp.controller('mainController', function($scope) {
 sensorCloudApp.controller('userNavigationController', function($scope, $http, $state, userService) {
 	userService.getCurrentUser(function(res){
 		$scope.useremail = res;
+		$scope.logout = function(){
+			userService.logout();
+		}
 	});
 });
 

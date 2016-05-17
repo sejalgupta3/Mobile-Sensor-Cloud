@@ -9,6 +9,13 @@ sensorCloudApp.service('userService', function($http, $state){
 		};
 
 	var responseMessage;
+	
+	this.logout = function(){
+		
+		$http.get('/logout').success(function(){
+			$state.go('login');
+		});
+	};
 
 	this.registerUser = function(fname, userType, lname, email, username, password){
 		userData.firstName = fname;
